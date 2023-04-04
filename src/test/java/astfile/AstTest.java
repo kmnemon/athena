@@ -25,7 +25,7 @@ public class AstTest {
 
     @Test
     public void TestAstToClasses(){
-        assertEquals(2, ast.p.packages.get("testdata").classes.size());
+        assertEquals(3, ast.p.packages.get("testdata").classes.size());
         assertEquals("TestClass", ast.p.packages.get("testdata").classes.get("TestClass").name);
         assertEquals("TT", ast.p.packages.get("testdata").classes.get("TT").name);
 
@@ -37,7 +37,13 @@ public class AstTest {
         assertEquals(1, ast.p.packages.get("testdata").classes.get("TestClass").methods.size());
         assertEquals("fn", ast.p.packages.get("testdata").classes.get("TestClass").methods.get("fn").name);
         assertEquals(3, ast.p.packages.get("testdata").classes.get("TestClass").methods.get("fn").parametersCount);
-        assertEquals(5, ast.p.packages.get("testdata").classes.get("TestClass").methods.get("fn").lines);
+        assertEquals(7, ast.p.packages.get("testdata").classes.get("TestClass").methods.get("fn").lines);
 
+    }
+
+    @Test
+    public void TestAstToComments(){
+        assertEquals(6, ast.p.packages.get("testdata").classes.get("X").comments.size());
+        assertEquals(2, ast.p.packages.get("testdata").classes.get("X").comments.get(3));
     }
 }
