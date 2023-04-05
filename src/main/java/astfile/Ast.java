@@ -68,7 +68,7 @@ public class Ast {
     }
 
     private static void generateClass(CompilationUnit cu, String packName){
-        Classes ci = new Classes();;
+        Classes ci = new Classes();
         ci.visit(cu, packName);
         generateComment(cu, packName, ci.tmpClassName);
     }
@@ -79,7 +79,7 @@ public class Ast {
         @Override
         public void visit(ClassOrInterfaceDeclaration cid, String packName){
             super.visit(cid, packName);
-            Class c = new Class(cid.getNameAsString(), cid.isInterface(),cid.getFields().size());
+            Class c = new Class(cid.getNameAsString(), packName, cid.isInterface(),cid.getFields().size());
             p.packages.get(packName).classes.put(cid.getNameAsString(), c);
             this.tmpClassName = cid.getNameAsString();
 
@@ -99,7 +99,7 @@ public class Ast {
     }
 
     private static void generateMethod(MethodDeclaration md,String packName, String cname){
-        Method m = new Method(md.getNameAsString(), md.getDeclarationAsString(), md.getParameters().size(), getMethodLines(md));
+        Method m = new Method(md.getNameAsString(), packName, cname, md.getDeclarationAsString(), md.getParameters().size(), getMethodLines(md));
         p.packages.get(packName).classes.get(cname).methods.put(splitMethodSig(md.getDeclarationAsString(), md.getNameAsString()), m);
     }
 

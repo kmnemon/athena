@@ -12,9 +12,7 @@ public class Main {
     public static void main(String[] args) {
 //        String FILE_PATH = "";
         String codeDir = "./src/test/java/testdata/";
-        Project p = new Project(codeDir);
-        Ast.generateObjectsWithAst(codeDir, p);
-        TechDebt.generateObjectsWithTechDebt(codeDir, p);
+        Project p = object.parseObjects(codeDir);
 
     }
 }

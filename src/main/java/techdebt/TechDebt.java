@@ -16,8 +16,8 @@ public class TechDebt {
     }
 
     private static void generateObjectsWithCyclomatic(String codeDir){
-        List<String> pmdOutput = Tools.generatePmdOutput(codeDir);
-        pmdOutput.stream()
+        TechDebt.p.cyclomatics = Tools.generatePmdOutput(codeDir);
+        TechDebt.p.cyclomatics.stream()
                 .filter(l -> l.contains("has a cyclomatic complexity"))
                 .forEach(TechDebt::addCyclomaticToObject);
     }
@@ -55,8 +55,8 @@ public class TechDebt {
     }
 
     private static void generateObjectsWithDuplication(String codeDir){
-        List<String> cpdOutput = Tools.generateCpdOutput(codeDir);
-        cpdOutput.stream()
+        TechDebt.p.duplications = Tools.generateCpdOutput(codeDir);
+        TechDebt.p.duplications.stream()
                 .filter(TechDebt::filterDuplicationOutput)
                 .forEach(TechDebt::addDuplicationOutput);
     }
