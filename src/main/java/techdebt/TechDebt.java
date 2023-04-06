@@ -3,8 +3,6 @@ package techdebt;
 import object.Project;
 import pmd.Tools;
 
-import java.util.List;
-
 public class TechDebt {
     public static Project p;
 
@@ -23,13 +21,22 @@ public class TechDebt {
     }
 
     private static void addCyclomaticToObject(String line){
-        String packageName = splitPackageName(line);
-        String className = splitClassName(line);
-        String methodDeclaration = splitMethodDeclaration(line);
+        String packName = splitPackageName(line);
+        String cname = splitClassName(line);
+        String mname = splitMethodName(line);
 
-        int cyclomatic = splitCyclomatic(line);
+        String tmname;
+        if( p.packages.get(packName).classes.get(cname).methods.get(mname).cyclomatic == 0){
+            tmname = mname;
+        }else{
+            int i = 2;
+            while (p.packages.get(packName).classes.get(cname).methods.get(mname+ "@" + i).cyclomatic != 0){
+                i++;
+            }
+            tmname = mname + "@" + i;
+        }
 
-        p.packages.get(packageName).classes.get(className).methods.get(methodDeclaration).cyclomatic = cyclomatic;
+        p.packages.get(packName).classes.get(cname).methods.get(tmname).cyclomatic = splitCyclomatic(line);
     }
 
     private static String splitPackageName(String line){
@@ -44,8 +51,8 @@ public class TechDebt {
         return line.substring(index+1, endIndex);
     }
 
-    private static String splitMethodDeclaration(String line){
-        return "";
+    private static String splitMethodName(String line){
+        return line.substring(line.indexOf("'") + 1, line.lastIndexOf("("));
     }
 
     public static int splitCyclomatic(String line){
@@ -62,13 +69,11 @@ public class TechDebt {
     }
 
     private static boolean filterDuplicationOutput(String str){
-        return str.contains("Found a") || str.contains("Starting at line");
+        return str.contains("Found a");
     }
 
-    private static void addDuplicationOutput(String lines){
-        //Found a 258 line xxx files:
-        //Starting at line 258 of Dxxx.java
-        //Starting at line 234 of xxx.java
+    private static void addDuplicationOutput(String line){
+        p.duplication += Integer.parseInt(line.substring(8, line.indexOf("line")-1));
     }
 
 }

@@ -1,17 +1,39 @@
 package object;
 
+import astfile.Ast;
+import techdebt.TechDebt;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Project {
     public String name;
     public Map<String, Package> packages;
 
+    public List<String> cyclomatics;
+    public List<String> duplications;
+
+    //project level
+    public Integer duplication;
+
+    //class level
+    public Map<String, Integer> godClassWithMethods;
+    public Map<String, Integer> godClassWithVariables;
+    public Map<String, Integer> godComments;
+
+    //method level
+    public Map<String, Integer> superMethodWithParameters;
+    public Map<String, Integer> superMethodWithLines;
+    public Map<String, Integer> superCyclomatics;
+
+
     public Project(String name) {
         this.name = name;
         this.packages = new HashMap<>();
 
-        this.cyclomatic = new ArrayList<>();
+        this.cyclomatics = new ArrayList<>();
         this.duplications = new ArrayList<>();
 
         this.godClassWithMethods = new HashMap<>();
@@ -21,31 +43,39 @@ public class Project {
         this.superMethodWithParameters = new HashMap<>();
         this.superMethodWithLines = new HashMap<>();
         this.superCyclomatics = new HashMap<>();
+        this.duplication = 0;
     }
 
-    public static parseObjects(String codeDir) Project{
+    @Override
+    public String toString(){
+        String str = "Project Tech: \n";
+        str += "    God Classes: \n";
+        str += "        godClassWithMethods: "+ this.godClassWithMethods.size();
+        str += "sdf";
+        return str;
+    }
+
+
+
+    public static Project parseObjects(String codeDir){
         Project p = new Project(codeDir);
         Ast.generateObjectsWithAst(codeDir, p);
         TechDebt.generateObjectsWithTechDebt(codeDir, p);
-        parseTechDebt();
+        p.parseTechDebt();
         return p;
     }
 
-    public List<String> cyclomatics;
-    public List<String> duplications;
 
-    public Map<String, int> godClassWithMethods;
-    public Map<String, int> godClassWithVariables;
-    public Map<String, int> godComments;
-
-
-    public Map<String, int> superMethodWithParameters;
-    public Map<String, int> superMethodWithLines;
-    public Map<String, int> superCyclomatics;
 
     private void parseTechDebt(){
-        this.packages.
-
+        for (var packs : this.packages.entrySet()){
+            for( var classes : packs.getValue().classes.entrySet()){
+                parseGodClass(classes.getValue());
+                for( var methods : classes.getValue().methods.entrySet()){
+                    parseSuperMethod(methods.getValue());
+                }
+            }
+        }
     }
 
     private void parseGodClass(Class c){
@@ -55,20 +85,27 @@ public class Project {
     }
 
     private void parseGodClassWithMethods(Class c){
-        if( c.methods.size() > 30){
-            this.godClassWithMethods.put(generateFullClassName(c.packName, c.name), c.methods.szie());
+        if( c.methods.size() > 3){
+            this.godClassWithMethods.put(generateFullClassName(c.packName, c.name), c.methods.size());
         }
     }
 
     private void parseGodClassWithVariables(Class c){
-        if( c.variableCount > 20){
+        if( c.variableCount > 2){
             this.godClassWithVariables.put(generateFullClassName(c.packName, c.name), c.variableCount);
         }
     }
 
     private void parseGodComments(Class c){
-        if( c.comments > 10){
-            this.godComments.put(generateFullClassName(c.packName, c.name), c.comments.size());
+        int commentsCount = 0;
+        for( Integer commentSize : c.comments){
+            if( commentSize > 1){
+                commentsCount += commentSize;
+            }
+        }
+
+        if( commentsCount > 0) {
+            this.godComments.put(generateFullClassName(c.packName, c.name), commentsCount);
         }
     }
 
@@ -84,19 +121,19 @@ public class Project {
 
     private void parseSuperMethodWithParameters(Method m){
         if( m.parametersCount > 10){
-            this.superMethodWithParameters.put(generateFullMethodName(m.packName, m.cname, m.declaration), m.parametersCount)
+            this.superMethodWithParameters.put(generateFullMethodName(m.packName, m.cname, m.declaration), m.parametersCount);
         }
     }
 
     private void parseSuperMethodWithLines(Method m){
         if( m.lines > 100){
-            this.superMethodWithLines.put(generateFullMethodName(m.packName, m.cname, m.declaration), m.lines;)
+            this.superMethodWithLines.put(generateFullMethodName(m.packName, m.cname, m.declaration), m.lines);
         }
     }
 
     private void parseSuperCyclomatics(Method m){
         if( m.cyclomatic > 9){
-            this.superCyclomatics.put(generateFullMethodName(m.packName, m.cname, m.declaration), m.cyclomatic;)
+            this.superCyclomatics.put(generateFullMethodName(m.packName, m.cname, m.declaration), m.cyclomatic);
         }
     }
 

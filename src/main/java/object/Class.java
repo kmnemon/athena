@@ -16,32 +16,11 @@ public class Class{
 
     public Class(String name, String packName, boolean isInterface, int variableCount) {
         this.name = name;
-        this.packName = name;
+        this.packName = packName;
         this.isInterface = isInterface;
         this.variableCount = variableCount;
         this.methods = new HashMap<>();
         this.comments = new ArrayList<>();
     }
-
-    public String getClassName(){
-        return name;
-    }
-
-    public boolean isInterface(){
-        return isInterface;
-    }
-    
-    public boolean isSuperClassWithVariables(){
-        return this.variableCount > 20;
-    }
-
-    public boolean isSuperClassWithMethods(){
-        return this.methods.size() > 30;
-    }
-
-    public List<Integer> getSuperComments(){
-        return comments.stream().filter(i -> i >10).collect(Collectors.toList());
-    }
-
 
 }

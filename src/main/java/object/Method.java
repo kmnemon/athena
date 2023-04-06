@@ -22,12 +22,4 @@ public class Method {
         this.lines = lines;
         this.cyclomatic = 0;
     }
-
-    public boolean isSuperMethodWithParameters(){
-        return this.parametersCount > 10;
-    }
-
-    public boolean isSuperMethodWithLines(){
-        return this.lines > 100;
-    }
 }

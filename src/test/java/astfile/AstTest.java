@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 
 import java.nio.file.Paths;
 
-import static astfile.Ast.splitMethodSig;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AstTest {
@@ -49,15 +48,4 @@ public class AstTest {
         assertEquals(2, ast.p.packages.get("testdata").classes.get("X").comments.get(3));
     }
 
-    @Test
-    public void TestSplitMethodSig(){
-        String r1 = splitMethodSig("public String fn()", "fn");
-        String r2 = splitMethodSig("String fn(int fn1)", "fn");
-        String r3 = splitMethodSig("private void fn(int fn1, int fn2, int fn3)", "fn");
-
-        assertEquals("fn()", r1);
-        assertEquals("fn(int)", r2);
-        assertEquals("fn(int, int, int)", r3);
-
-    }
 }

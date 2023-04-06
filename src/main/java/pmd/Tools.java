@@ -13,13 +13,15 @@ public class Tools {
     private static final Logger log = LoggerFactory.getLogger(Tools.class);
 
     private static String getPmdCommand(String codeDir) {
-        String pmdDir = ".\\tools\\pmd-bin-6.45.0\\bin\\pmd.bat";
+//        String pmdDir = ".\\tools\\pmd-bin-6.55.0\\bin\\pmd.bat";
+        String pmdDir = "./tools/pmd-bin-6.55.0/bin/pmd.bat";
         String rulesets = "category/java/design.xml/CyclomaticComplexity";
-        return pmdDir + " -d" + codeDir + " -f text -R" + rulesets;
+        return pmdDir + " -d " + codeDir + " -f text -R " + rulesets;
     }
 
     private static String getCpdCommand(String codeDir) {
-        String cpdDir = ".\\tools\\pmd-bin-6.45.0\\bin\\cpd.bat";
+//        String cpdDir = ".\\tools\\pmd-bin-6.55.0\\bin\\cpd.bat";
+        String cpdDir = "./tools/pmd-bin-6.55.0/bin/cpd.bat";
         String minimumTokens = "100";
         String language = "java";
         String encoding = "utf8";
