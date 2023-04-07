@@ -1,7 +1,6 @@
 package main;
 
 
-import object.DiffProjectTechDebt;
 import object.Project;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +15,7 @@ public class Main {
 
         Project base = Project.parseObjects("");
 
-        Project diff = DiffProjectTechDebt.diffProjectTechDebt(base, target);
+//        Project diff = DiffProjectTechDebt.diffProjectTechDebt(base, target);
 
     }
 }

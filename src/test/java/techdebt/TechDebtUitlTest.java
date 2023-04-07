@@ -3,8 +3,9 @@ package techdebt;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static techdebt.Maintenance.splitCyclomatic;
 
-public class TechDebtTest {
+public class TechDebtUitlTest {
     @Test
     public void TestTest(){
         String lines = "xxx\\src\\main\\java\\com\\ke\\aaa.java";
@@ -27,7 +28,7 @@ public class TechDebtTest {
     public void TestSplitCyclomatic(){
         String s = "xxx of 13.";
 
-        int cycl = TechDebt.splitCyclomatic(s);
+        int cycl = splitCyclomatic(s);
 
         assertEquals(13, cycl);
     }

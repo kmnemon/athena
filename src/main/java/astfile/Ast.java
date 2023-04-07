@@ -2,6 +2,7 @@ package astfile;
 
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -20,6 +21,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 
@@ -51,6 +54,7 @@ public class Ast {
         try {
             CompilationUnit cu = StaticJavaParser.parse(path);
             String packName = generatePackage(cu);
+            if(Objects.equals(packName, "")) return;
             generateClass(cu, packName);
         } catch (IOException e) {
             log.error(e.toString());
@@ -59,8 +63,12 @@ public class Ast {
 
 
     private static String generatePackage(CompilationUnit cu){
-        cu.getPackageDeclaration().ifPresent(pd -> generatePackageByName(pd.getNameAsString()));
-        return cu.getPackageDeclaration().get().getNameAsString();
+        String packName = "";
+        if (cu.getPackageDeclaration().isPresent()) {
+            packName = cu.getPackageDeclaration().get().getNameAsString();
+            generatePackageByName(packName);
+        }
+        return packName;
     }
 
     private static void  generatePackageByName(String name){
@@ -112,7 +120,10 @@ public class Ast {
     }
 
     private static void generateComment(CompilationUnit cu, String packName, String cname) {
-        List<Integer> blockCommentCount = parseBlockComment(cu.getAllContainedComments());
+        List<Comment> comments = cu.getAllContainedComments();
+        if(comments.isEmpty()) return;
+
+        List<Integer> blockCommentCount = parseBlockComment(comments);
         blockCommentCount.forEach(cbc-> generateComments(cbc, packName, cname));
 
     }
@@ -154,16 +165,9 @@ public class Ast {
             mname = md.getNameAsString() + "@" + i;
         }
 
-        Method m = new Method(md.getNameAsString(), packName, cname, mname, md.getParameters().size(), getMethodLines(md));
+        Method m = new Method(mname, packName, cname, md.getDeclarationAsString(), md.getParameters().size(), getMethodLines(md));
         p.packages.get(packName).classes.get(cname).methods.put(mname, m);
     }
-
-//    public static String splitMethodSig(String mDeclaration, String mName){
-//        return mDeclaration.substring(mDeclaration.indexOf(mName), mDeclaration.lastIndexOf(")")+1)
-//                .replaceAll("\\s[a-zA-Z\\d+]+?,", ",")
-//                .replaceAll("\\s[a-zA-Z\\d+]+?\\)", ")")
-//                .replaceAll("<[a-zA-Z\\s]*,\\s*[a-zA-Z\\s]*>|<\\w+>", "");
-//    }
 
     private static int getMethodLines(MethodDeclaration md){
         return md.getEnd().get().line - md.getBegin().get().line + 1;

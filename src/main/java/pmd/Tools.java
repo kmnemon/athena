@@ -12,11 +12,16 @@ import java.util.List;
 public class Tools {
     private static final Logger log = LoggerFactory.getLogger(Tools.class);
 
-    private static String getPmdCommand(String codeDir) {
+    private static String getPmdCommand(String codeDir, String rulesets) {
 //        String pmdDir = ".\\tools\\pmd-bin-6.55.0\\bin\\pmd.bat";
         String pmdDir = "./tools/pmd-bin-6.55.0/bin/pmd.bat";
-        String rulesets = "category/java/design.xml/CyclomaticComplexity";
         return pmdDir + " -d " + codeDir + " -f text -R " + rulesets;
+    }
+
+    private static String getP3CPmdCommand(String codeDir, String ruleset){
+        //Stirng pmdDir = "java -cp .\\tools\\p3c-pmd\\p3c-pmd.jar net.sourceforge.pmd.PMD -e UTF-8";
+        String pmdDir = "java -cp ./tools/p3c-pmd/p3c-pmd.jar net.sourceforge.pmd.PMD -e UTF-8";
+        return pmdDir + " -d " + codeDir + " -f text -R " + ruleset;
     }
 
     private static String getCpdCommand(String codeDir) {
@@ -28,8 +33,12 @@ public class Tools {
         return cpdDir + " --minimum-tokens " + minimumTokens + " --files " + codeDir + " --language " + language + " --encoding " + encoding;
     }
 
-    public static List<String> generatePmdOutput(String codeDir){
-        return generatePmdOrCpdOutput(getPmdCommand(codeDir));
+    public static List<String> generatePmdOutput(String codeDir, String ruleset){
+        return generatePmdOrCpdOutput(getPmdCommand(codeDir, ruleset));
+    }
+
+    public static List<String> generateP3CPmdOutput(String codeDir, String ruleset){
+        return generatePmdOrCpdOutput(getP3CPmdCommand(codeDir, ruleset));
     }
 
     public static List<String> generateCpdOutput(String codeDir){
