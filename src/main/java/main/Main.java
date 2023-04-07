@@ -12,10 +12,12 @@ public class Main {
 //        String FILE_PATH = "";
         String codeDir = "./src/test/java/testdata/";
         Project target = Project.parseObjects(codeDir);
+        target.printObjects("cmd");
 
         Project base = Project.parseObjects("");
 
-//        Project diff = DiffProjectTechDebt.diffProjectTechDebt(base, target);
+       Project diff = object.DiffProjectTechDebt.diffTechDebtObjects(base, target);
+       diff.printObjects("cmd");
 
     }
 }

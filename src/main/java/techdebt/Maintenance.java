@@ -13,6 +13,8 @@ import java.util.Map;
 
 public class Maintenance {
     Project p;
+    PrintMaintenance printMaintenance;
+
     List<String> cyclomaticOriginData;
     List<String> duplicationOriginData;
 
@@ -50,7 +52,14 @@ public class Maintenance {
         parseCyclomaticToObject();
 
         parseDuplication();
+        
+        generatePrintMaintenance();
     }
+
+    private void generatePrintMaintenance(){
+        this.printMaintenance = new PrintMaintenance(this);
+    }
+
 
     private void parseGodOrSuper(){
         for (var packs : p.packages.entrySet()){
@@ -70,13 +79,13 @@ public class Maintenance {
     }
 
     private void parseGodClassWithMethods(Class c){
-        if( c.methods.size() > 3){
+        if( c.methods.size() > DebtLimits.GODCLASS_WITH_METHODS){
             this.godClassWithMethods.put(generateFullClassName(c.packName, c.name), c.methods.size());
         }
     }
 
     private void parseGodClassWithVariables(Class c){
-        if( c.variableCount > 2){
+        if( c.variableCount > DebtLimits.GODCLASS_WITH_VARIABLES){
             this.godClassWithVariables.put(generateFullClassName(c.packName, c.name), c.variableCount);
         }
     }
@@ -84,7 +93,7 @@ public class Maintenance {
     private void parseGodComments(Class c){
         int commentsCount = 0;
         for( Integer commentSize : c.comments){
-            if( commentSize > 1){
+            if( commentSize > DebtLimits.GODCOMMENTS){
                 commentsCount += commentSize;
             }
         }
@@ -105,19 +114,19 @@ public class Maintenance {
     }
 
     private void parseSuperMethodWithParameters(Method m){
-        if( m.parametersCount > 10){
+        if( m.parametersCount > DebtLimits.SUPERMETHOD_WITH_PARAMETERS){
             this.superMethodWithParameters.put(generateFullMethodName(m.packName, m.cname, m.declaration), m.parametersCount);
         }
     }
 
     private void parseSuperMethodWithLines(Method m){
-        if( m.lines > 100){
+        if( m.lines > DebtLimits.SUPERMETHOD_WITH_LINES){
             this.superMethodWithLines.put(generateFullMethodName(m.packName, m.cname, m.declaration), m.lines);
         }
     }
 
     private void parseSuperCyclomatics(Method m){
-        if( m.cyclomatic > 9){
+        if( m.cyclomatic > DebtLimits.SUPERCYCLOMATICS){
             this.superCyclomatics.put(generateFullMethodName(m.packName, m.cname, m.declaration), m.cyclomatic);
         }
     }
@@ -194,7 +203,11 @@ public class Maintenance {
     }
 
     private void addDuplicationOutput(String line){
-        this.superDuplications.add(Integer.parseInt(line.substring(8, line.indexOf("line")-1)));
+        duplicationLineSize = Integer.parseInt(line.substring(8, line.indexOf("line")-1));
+        if( duplicationLineSize > DebtLimits.SUPERDUPLICATIONS){
+            this.superDuplications.add(duplicationLineSize);
+        }
     }
+
 
 }

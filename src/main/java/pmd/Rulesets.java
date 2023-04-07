@@ -10,15 +10,15 @@ public enum Rulesets {
 
     //p3c
     COMMENT("rulesets/java/ali-comment.xml"),
-    CONCURRENT("rulesets/java/ali-comment.xml"),
-    CONSTANT("rulesets/java/ali-comment.xml"),
-    EXCEPTION("rulesets/java/ali-comment.xml"),
-    FLOWCONTROL("rulesets/java/ali-comment.xml"),
-    NAMING("rulesets/java/ali-comment.xml"),
-    OOP("rulesets/java/ali-comment.xml"),
-    ORM("rulesets/java/ali-comment.xml"),
-    OTHER("rulesets/java/ali-comment.xml"),
-    SET("rulesets/java/ali-comment.xml");
+    CONCURRENT("rulesets/java/ali-concurrent.xml"),
+    CONSTANT("rulesets/java/ali-constant.xml"),
+    EXCEPTION("rulesets/java/ali-exception.xml"),
+    FLOWCONTROL("rulesets/java/ali-flowcontrol.xml"),
+    NAMING("rulesets/java/ali-naming.xml"),
+    OOP("rulesets/java/ali-oop.xml"),
+    ORM("rulesets/java/ali-orm.xml"),
+    OTHER("rulesets/java/ali-other.xml"),
+    SET("rulesets/java/ali-set.xml");
 
 
 

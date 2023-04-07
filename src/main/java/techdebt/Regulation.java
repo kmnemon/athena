@@ -8,6 +8,7 @@ import java.util.List;
 
 public class Regulation {
     Project p;
+    PrintRegulation printRegulation;
 
     List<String> commentOriginData;
     List<String> concurrentOriginData;
@@ -26,6 +27,7 @@ public class Regulation {
 
     public void parseRegulationTechDebt(String codeDir){
         generateOriginData(codeDir);
+        generatePrintRegulation();
 
     }
 
@@ -33,6 +35,19 @@ public class Regulation {
     private void generateOriginData(String codeDir){
         this.commentOriginData = Tools.generateP3CPmdOutput(codeDir, Rulesets.COMMENT.toString());
         this.concurrentOriginData = Tools.generateP3CPmdOutput(codeDir, Rulesets.CONCURRENT.toString());
+        this.constantOriginData = Tools.generateP3CPmdOutput(codeDir, Rulesets.CONSTANT.toString());
+        this.exceptionOriginData = Tools.generateP3CPmdOutput(codeDir, Rulesets.EXCEPTION.toString());
+        this.flowControlOriginData = Tools.generateP3CPmdOutput(codeDir, Rulesets.FLOWCONTROL.toString());
+        this.namingOriginData = Tools.generateP3CPmdOutput(codeDir, Rulesets.NAMING.toString());
+        this.oopOriginData = Tools.generateP3CPmdOutput(codeDir, Rulesets.OOP.toString());
+        this.ormOriginData = Tools.generateP3CPmdOutput(codeDir, Rulesets.ORM.toString());
+        this.otherOriginData = Tools.generateP3CPmdOutput(codeDir, Rulesets.OTHER.toString());
+        this.setOriginData = Tools.generateP3CPmdOutput(codeDir, Rulesets.SET.toString());
+
+    }
+
+    private void generatePrintRegulation(){
+        this.printRegulation = new PrintRegulation(this);
     }
 
 }

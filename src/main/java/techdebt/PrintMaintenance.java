@@ -7,8 +7,6 @@ import java.util.Collections;
 
 
 public class PrintMaintenance {
-    private Maintenance m;
-
     public int godClassesCount;
     public int maxGodClassWithVariable;
     public int maxGodClassWithMethods;
@@ -26,75 +24,76 @@ public class PrintMaintenance {
     public int superDuplicationsCount;
     public int maxDuplication;
 
+    public PrintMaintenance(){}
+
     public PrintMaintenance(Maintenance m) {
-        this.m = m;
-        setGodClassesCount();
-        setMaxGodClassWithVariable();
-        setMaxGodClassWithMethods();
-        setSuperMethodsCount();
-        setMaxSuperMethodWithParameters();
-        setMaxSuperMethodWithLines();
-        setGoCommentsCount();
-        setMaxGodComment();
-        setSuperCyclomaticsCount();
-        setMaxCyclomatic();
-        setSuperDuplicationsCount();
-        setMaxDuplication();
+        setGodClassesCount(m);
+        setMaxGodClassWithVariable(m);
+        setMaxGodClassWithMethods(m);
+        setSuperMethodsCount(m);
+        setMaxSuperMethodWithParameters(m);
+        setMaxSuperMethodWithLines(m);
+        setGoCommentsCount(m);
+        setMaxGodComment(m);
+        setSuperCyclomaticsCount(m);
+        setMaxCyclomatic(m);
+        setSuperDuplicationsCount(m);
+        setMaxDuplication(m);
     }
 
 
 
-    public void setGodClassesCount() {
+    void setGodClassesCount(Maintenance m) {
         this.godClassesCount = m.godClassWithVariables.size() + m.godClassWithMethods.size();
     }
 
-    public void setMaxGodClassWithVariable() {
+    void setMaxGodClassWithVariable(Maintenance m) {
         this.maxGodClassWithVariable = m.godClassWithVariables.entrySet().stream()
                 .max((entry1, entry2) -> entry1.getValue() > entry2.getValue() ? 1 : -1).get().getValue();
     }
 
-    public void setMaxGodClassWithMethods() {
+    void setMaxGodClassWithMethods(Maintenance m) {
         this.maxGodClassWithMethods = m.godClassWithMethods.entrySet().stream()
                 .max((entry1, entry2) -> entry1.getValue() > entry2.getValue() ? 1 : -1).get().getValue();
     }
 
-    public void setSuperMethodsCount() {
+    void setSuperMethodsCount(Maintenance m) {
         this.superMethodsCount = m.superMethodWithParameters.size() + m.superMethodWithLines.size();
     }
 
-    public void setMaxSuperMethodWithParameters() {
+    void setMaxSuperMethodWithParameters(Maintenance m) {
         this.maxSuperMethodWithParameters = m.superMethodWithParameters.entrySet().stream()
                 .max((entry1, entry2) -> entry1.getValue() > entry2.getValue() ? 1 : -1).get().getValue();
     }
 
-    public void setMaxSuperMethodWithLines() {
+    void setMaxSuperMethodWithLines(Maintenance m) {
         this.maxSuperMethodWithLines = m.superMethodWithLines.entrySet().stream()
                 .max((entry1, entry2) -> entry1.getValue() > entry2.getValue() ? 1 : -1).get().getValue();
     }
 
-    public void setGoCommentsCount() {
+    void setGoCommentsCount(Maintenance m) {
         this.goCommentsCount = m.godComments.size();
     }
 
-    public void setMaxGodComment() {
+    void setMaxGodComment(Maintenance m) {
         this.maxGodComment = m.godComments.entrySet().stream()
                 .max((entry1, entry2) -> entry1.getValue() > entry2.getValue() ? 1 : -1).get().getValue();
     }
 
-    public void setSuperCyclomaticsCount() {
+    void setSuperCyclomaticsCount(Maintenance m) {
         this.superCyclomaticsCount = m.superCyclomatics.size();
     }
 
-    public void setMaxCyclomatic() {
+    public void setMaxCyclomatic(Maintenance m) {
         this.maxCyclomatic = m.superCyclomatics.entrySet().stream()
                 .max((entry1, entry2) -> entry1.getValue() > entry2.getValue() ? 1 : -1).get().getValue();
     }
 
-    public void setSuperDuplicationsCount() {
+    void setSuperDuplicationsCount(Maintenance m) {
         this.superDuplicationsCount = m.superDuplications.size();
     }
 
-    public void setMaxDuplication() {
+    void setMaxDuplication(Maintenance m) {
         this.maxDuplication = Collections.max(m.superDuplications);
     }
 
