@@ -19,8 +19,8 @@ public class Project {
         this.name = name;
         this.packages = new HashMap<>();
         this.maintenance = new Maintenance(this);
-        this.regulation = new Regulation(this);
-        this.design = new Design(this);
+        this.regulation = new Regulation();
+        this.design = new Design();
     }
 
     public static Project parseObjects(String codeDir){
@@ -33,13 +33,13 @@ public class Project {
         return p;
     }
 
-    public void printObjects(String format) throws IOException{
+    public void printPrintObjects(String format, String reportDir) throws IOException{
         if(format == "cmd"){
             System.out.println(new PrintMaintenance(maintenance));
             System.out.println(new PrintRegulation(regulation));
             System.out.println(new PrintDesign(design));
         }else if( format = "text"){
-            FileWriter fileWriter = new FileWriter(name);
+            FileWriter fileWriter = new FileWriter(new File(reportDir, "print_summary"));
             PrintWriter printWriter = new PrintWriter(fileWriter);
             printWriter.println(new PrintMaintenance(maintenance));
             printWriter.println(new PrintRegulation(regulation));
@@ -49,7 +49,14 @@ public class Project {
 
     }
 
-
+    public void printTechDebtObjects(String reportDir) throws IOException{
+            FileWriter fileWriter = new FileWriter(new File(reportDir, "tech_debt_objects"));
+            PrintWriter printWriter = new PrintWriter(fileWriter);
+            printWriter.println(new Maintenance(maintenance));
+            printWriter.println(new Regulation(regulation));
+            printWriter.println(new Design(design));
+            printWriter.close();
+    }
 
 
 

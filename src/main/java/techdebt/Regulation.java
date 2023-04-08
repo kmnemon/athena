@@ -31,6 +31,12 @@ public class Regulation {
 
     }
 
+    @Override
+    public String toString(){
+        return new Gson().toJson(this);
+    }
+
+
     //origin data
     private void generateOriginData(String codeDir){
         this.commentOriginData = Tools.generateP3CPmdOutput(codeDir, Rulesets.COMMENT.toString());

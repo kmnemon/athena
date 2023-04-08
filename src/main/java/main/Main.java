@@ -10,14 +10,19 @@ public class Main {
 
     public static void main(String[] args) {
 //        String FILE_PATH = "";
-        String codeDir = "./src/test/java/testdata/";
-        Project target = Project.parseObjects(codeDir);
-        target.printObjects("cmd");
+        String targetCodeDir = "./src/test/java/testdata/";
+        String baseCodeDir = "./src/test/java/testdata/";
+        String reportDir = "";
 
-        Project base = Project.parseObjects("");
 
-       Project diff = object.DiffProjectTechDebt.diffTechDebtObjects(base, target);
-       diff.printObjects("cmd");
+
+        Project target = Project.parseObjects(targetCodeDir);
+        target.printPrintObjects("cmd", reportDir);
+
+        Project base = Project.parseObjects(baseCodeDir);
+
+       Project diff = DiffProjectTechDebt.diffTechDebtObjects(base, target);
+       diff.printPrintObjects("cmd", reportDir);
 
     }
 }

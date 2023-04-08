@@ -31,6 +31,7 @@ public class Maintenance {
 
     List<Integer> superDuplications;
 
+    public Maintenance(){}
 
     public Maintenance(Project p) {
         this.p = p;
@@ -44,6 +45,12 @@ public class Maintenance {
         this.superCyclomatics = new HashMap<>();
         this.superDuplications = new ArrayList<>();
     }
+
+    @Override
+    public String toString(){
+        return new Gson().toJson(this);
+    }
+
 
     public void parseMaintenanceTechDebt(String codeDir){
         parseGodOrSuper();

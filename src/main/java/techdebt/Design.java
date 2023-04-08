@@ -3,7 +3,6 @@ package techdebt;
 import object.Project;
 
 public class Design {
-    Project p;
     PrintDesign printDesign;
 
     List<String> designOriginData;
@@ -11,9 +10,13 @@ public class Design {
     List<String> performanceOriginData;
     List<String> errorProneOriginData;
 
-    public Design(Project p) {
-        this.p = p;
+    public Design(){}
+
+    @Override
+    public String toString(){
+        return new Gson().toJson(this);
     }
+
 
     public void parseDesignTechDebt(String codeDir){
         generateOriginData(codeDir);
@@ -32,4 +35,6 @@ public class Design {
     private void generatePrintDesign(){
         this.printDesign = new PrintDesign(this);
     }
+
+
 }

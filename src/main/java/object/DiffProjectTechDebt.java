@@ -14,6 +14,68 @@ public class DiffProjectTechDebt {
         return diff;
     }
 
+    //Maintenance, regulation, design only increase data
+    private static Maintenance diffMaintenance(Maintenance base, Maintenance target){
+        Maintenance diffMt = new Maintenance();
+        diffMt.cyclomaticOriginData = diffListOnlyInSecond(base.cyclomaticOriginData, target.cyclomaticOriginData);
+        //duplicationOriginData diff value useless
+        diffMt.superDuplications = diffListOnlyInSecond(base.superDuplications, target.superDuplications);
+        diffMt.godClassWithMethods = diffMapOnlyIncreaseInSecondMap(base.godClassWithMethods, target.godClassWithMethods);
+        diffMt.godClassWithVariables = diffMapOnlyIncreaseInSecondMap(base.godClassWithVariables, target.godClassWithVariables);
+        diffMt.godComments = diffMapOnlyIncreaseInSecondMap(base.godComments, target.godComments);
+        diffMt.superMethodWithParameters = diffMapOnlyIncreaseInSecondMap(base.superMethodWithParameters, target.superMethodWithParameters);
+        diffMt.superMethodWithLines = diffMapOnlyIncreaseInSecondMap(base.superMethodWithLines, target.superMethodWithLines);
+        diffMt.superCyclomatics = diffMapOnlyIncreaseInSecondMap(base.superCyclomatics, target.superCyclomatics);
+        return diffMt;
+    }
+
+    private static Regulation diffRegulation(Regulation base, Regulation target){
+        Regulation diffRe = new ArrayList();
+        diffRe.commentOriginData = diffListOnlyInSecond(base.commentOriginData, target.commentOriginData);
+        diffRe.concurrentOriginData = diffListOnlyInSecond(base.concurrentOriginData, target.concurrentOriginData);
+        diffRe.constantOriginData = diffListOnlyInSecond(base.constantOriginData, target.constantOriginData);
+        diffRe.exceptionOriginData = diffListOnlyInSecond(base.exceptionOriginData, target.exceptionOriginData);
+        diffRe.flowControlOriginData = diffListOnlyInSecond(base.flowControlOriginData, target.flowControlOriginData);
+        diffRe.namingOriginData = diffListOnlyInSecond(base.namingOriginData, target.namingOriginData);
+        diffRe.oopOriginData = diffListOnlyInSecond(base.oopOriginData, target.oopOriginData);
+        diffRe.ormOriginData = diffListOnlyInSecond(base.ormOriginData, target.ormOriginData);
+        diffRe.otherOriginData = diffListOnlyInSecond(base.otherOriginData, target.otherOriginData);
+        diffRe.setOriginData = diffListOnlyInSecond(base.setOriginData, target.setOriginData);
+        return diffRe;
+    }
+
+    private static Design diffDesign(Design base, Design target){
+        Design diffDesign = new Design();
+        diffDesign.designOriginData = diffListOnlyInSecond(base.designOriginData, target.designOriginData);
+        diffDesign.multithreadingOriginData = diffListOnlyInSecond(base.multithreadingOriginData, target.multithreadingOriginData);
+        diffDesign.performanceOriginData = diffListOnlyInSecond(base.performanceOriginData, target.performanceOriginData);
+        diffDesign.errorProneOriginData = diffListOnlyInSecond(base.errorProneOriginData, target.errorProneOriginData);
+        return diffDesign;
+    }
+
+    public static diffListOnlyInSecond<T> (List<T>base, List<T> target){
+        List<T> diff = new ArrayList(target);
+        diff.removeAll(base);
+        return diff;
+    }
+
+    private static Map<String, Integer> diffMapOnlyIncreaseInSecondMap(Map<String, Integer> base, Map<String, Integer> target){
+       Map<String, Integer> diffMap = new HashMap<>();
+       for( Map.Entry<String, Integer> entry : target.entrySet()){
+           if( base.containsKey(entry.getKey())){
+               Integer baseValue = base.get(entry.getKey());
+               if(entry.getValue() > baseValue) {
+                   diffMap.put(entry.getKey(), entry.getValue() - baseValue);
+               }
+           }else {
+               diffMap.put(entry.getKey(), entry.getValue());
+           }
+       }
+
+       return diffMap;
+   }
+
+    //diffPrint contain increase and decrease
     private static PrintMaintenance diffPrintMaintenance(PrintMaintenance base, PrintMaintenance target){
         PrintMaintenance diffPM = new PrintMaintenance();
         diffPM.godClassesCount = target.godClassesCount - base.godClassesCount;
@@ -66,26 +128,5 @@ public class DiffProjectTechDebt {
        return diff;
    }
 
-    private static Map<String, Integer> diffMap(Map<String, Integer> b, Map<String, Integer> t){
-       Map<String, Integer> diffMap = new HashMap<>();
-       for( Map.Entry<String, Integer> entry : t.entrySet()){
-           if( b.containsKey(entry.getKey())){
-               Integer baseValue = b.get(entry.getKey());
-               if(!Objects.equals(entry.getValue(), baseValue)) {
-                   diffMap.put(entry.getKey(), entry.getValue() - baseValue);
-               }
-           }else {
-               diffMap.put(entry.getKey(), entry.getValue());
-           }
-       }
 
-       //target delete content
-       for( Map.Entry<String, Integer> entry : b.entrySet()){
-           if(!t.containsKey(entry.getKey())){
-               diffMap.put(entry.getKey(), -entry.getValue());
-           }
-       }
-
-       return diffMap;
-   }
 }
