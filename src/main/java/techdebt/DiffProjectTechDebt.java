@@ -1,7 +1,6 @@
 package techdebt;
 
 import object.Project;
-import techdebt.*;
 
 import java.util.*;
 
@@ -92,7 +91,7 @@ public class DiffProjectTechDebt {
         diffPM.maxSuperMethodWithParameters = target.maxSuperMethodWithParameters - base.maxSuperMethodWithParameters;
         diffPM.maxSuperMethodWithLines = target.maxSuperMethodWithLines - base.maxSuperMethodWithLines;
 
-        diffPM.goCommentsCount = target.goCommentsCount - base.goCommentsCount;
+        diffPM.godCommentsCount = target.godCommentsCount - base.godCommentsCount;
         diffPM.maxGodComment = target.maxGodComment - base.maxGodComment;
 
         diffPM.superCyclomaticsCount = target.superCyclomaticsCount = base.superCyclomaticsCount;

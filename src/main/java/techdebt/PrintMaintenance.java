@@ -4,7 +4,6 @@ package techdebt;
 import com.google.gson.Gson;
 import java.util.Collections;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class PrintMaintenance {
@@ -16,7 +15,7 @@ public class PrintMaintenance {
     public int maxSuperMethodWithParameters;
     public int maxSuperMethodWithLines;
 
-    public int goCommentsCount;
+    public int godCommentsCount;
     public int maxGodComment;
 
     public int superCyclomaticsCount;
@@ -34,7 +33,7 @@ public class PrintMaintenance {
         setSuperMethodsCount(m);
         setMaxSuperMethodWithParameters(m);
         setMaxSuperMethodWithLines(m);
-        setGoCommentsCount(m);
+        setGodCommentsCount(m);
         setMaxGodComment(m);
         setSuperCyclomaticsCount(m);
         setMaxCyclomatic(m);
@@ -68,8 +67,8 @@ public class PrintMaintenance {
         this.maxSuperMethodWithLines = getMapMaxValue(m.superMethodWithLines);
     }
 
-    void setGoCommentsCount(Maintenance m) {
-        this.goCommentsCount = m.godComments.size();
+    void setGodCommentsCount(Maintenance m) {
+        this.godCommentsCount = m.godComments.size();
     }
 
     void setMaxGodComment(Maintenance m) {
