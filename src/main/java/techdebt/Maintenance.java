@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import object.Class;
 import object.Method;
 import object.Project;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import pmd.Rulesets;
 import pmd.Tools;
 
@@ -32,6 +34,9 @@ public class Maintenance {
 
     List<Integer> superDuplications;
 
+    private static final Logger log = LoggerFactory.getLogger(Maintenance.class);
+
+
     public Maintenance(){}
 
     public Maintenance(Project p) {
@@ -54,12 +59,11 @@ public class Maintenance {
 
 
     public void parseMaintenanceTechDebt(String codeDir){
-        parseGodOrSuper();
-
         generateOriginData(codeDir);
         parseCyclomaticToObject();
-
         parseDuplication();
+
+        parseGodOrSuper();
         
         generatePrintMaintenance();
     }
@@ -177,8 +181,19 @@ public class Maintenance {
     }
 
     private static String splitPackageName(String line){
-        int index = line.lastIndexOf("\\src\\main\\java\\") + 15;
+        int index = -1;
         int endIndex = line.lastIndexOf("\\");
+
+        int tmpIndex = line.lastIndexOf("\\src\\main\\java\\");
+        int tmpIndex1 = line.lastIndexOf("\\src\\test\\java\\");
+        if( tmpIndex != -1){
+            index = tmpIndex + 15;
+        }else if(tmpIndex1 != -1){
+            index = tmpIndex1 + 15;
+        } else {
+            log.error("split package name wrong");
+        }
+
         return line.substring(index, endIndex).replace("\\", ".");
     }
 

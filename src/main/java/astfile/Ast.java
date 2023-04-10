@@ -3,6 +3,7 @@ package astfile;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.PackageDeclaration;
+import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -22,7 +23,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 
@@ -84,10 +84,15 @@ public class Ast {
         Enums en = new Enums();
         en.visit(cu, packName);
 
+        Annotations an = new Annotations();
+        an.visit(cu, packName);
+
         if(ci.tmpClassName != null) {
             generateComment(cu, packName, ci.tmpClassName);
-        }else {
+        }else if(en.tmpClassName != null){
             generateComment(cu, packName, en.tmpClassName);
+        }else if(an.tmpClassName != null){
+            generateComment(cu, packName, an.tmpClassName);
         }
     }
 
@@ -116,6 +121,20 @@ public class Ast {
             this.tmpClassName = emd.getNameAsString();
 
             emd.getMethods().forEach(m -> generateMethod(m, packName, emd.getNameAsString()));
+        }
+    }
+
+    private static class Annotations extends VoidVisitorAdapter<String>{
+        public String tmpClassName;
+
+        @Override
+        public void visit(AnnotationDeclaration annod, String packName){
+            super.visit(annod, packName);
+            Class c = new Class(annod.getNameAsString(), packName, false, annod.getFields().size());
+            p.packages.get(packName).classes.put(annod.getNameAsString(), c);
+            this.tmpClassName = annod.getNameAsString();
+
+            annod.getMethods().forEach(m -> generateMethod(m, packName, annod.getNameAsString()));
         }
     }
 

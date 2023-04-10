@@ -18,13 +18,19 @@ public class Main {
         String reportDir = "";
 
 
+        System.out.println("~~~~target summary~~~~");
         Project target = Project.parseObjects(targetCodeDir);
         target.printPrintObjects("cmd", reportDir);
+        System.out.println();
 
-        Project base = Project.parseObjects(baseCodeDir);
-
-        Project diff = diffTechDebtObjects(base, target);
-        diff.printPrintObjects("cmd", reportDir);
+//        System.out.println("~~~~base summary~~~~");
+//        Project base = Project.parseObjects(baseCodeDir);
+//        base.printPrintObjects("cmd", reportDir);
+//        System.out.println();
+//
+//        System.out.println("~~~~diff summary~~~~");
+//        Project diff = diffTechDebtObjects(base, target);
+//        diff.printPrintObjects("cmd", reportDir);
 
     }
 }
