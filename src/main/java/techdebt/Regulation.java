@@ -1,14 +1,16 @@
 package techdebt;
 
+import com.google.gson.Gson;
 import object.Project;
 import pmd.Rulesets;
 import pmd.Tools;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Regulation {
-    Project p;
-    PrintRegulation printRegulation;
+    public PrintRegulation printRegulation;
 
     List<String> commentOriginData;
     List<String> concurrentOriginData;
@@ -21,9 +23,7 @@ public class Regulation {
     List<String> otherOriginData;
     List<String> setOriginData;
 
-    public Regulation(Project p) {
-        this.p = p;
-    }
+    public Regulation() {}
 
     public void parseRegulationTechDebt(String codeDir){
         generateOriginData(codeDir);

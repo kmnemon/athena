@@ -1,5 +1,6 @@
 package techdebt;
 
+import com.google.gson.Gson;
 import object.Class;
 import object.Method;
 import object.Project;
@@ -13,7 +14,7 @@ import java.util.Map;
 
 public class Maintenance {
     Project p;
-    PrintMaintenance printMaintenance;
+    public PrintMaintenance printMaintenance;
 
     List<String> cyclomaticOriginData;
     List<String> duplicationOriginData;
@@ -210,7 +211,7 @@ public class Maintenance {
     }
 
     private void addDuplicationOutput(String line){
-        duplicationLineSize = Integer.parseInt(line.substring(8, line.indexOf("line")-1));
+        int duplicationLineSize = Integer.parseInt(line.substring(8, line.indexOf("line")-1));
         if( duplicationLineSize > DebtLimits.SUPERDUPLICATIONS){
             this.superDuplications.add(duplicationLineSize);
         }

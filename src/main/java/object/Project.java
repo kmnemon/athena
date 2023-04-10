@@ -1,11 +1,15 @@
 package object;
 
 import astfile.Ast;
-import techdebt.Maintenance;
-import techdebt.Regulation;
+import techdebt.*;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class Project {
     public String name;
@@ -33,12 +37,12 @@ public class Project {
         return p;
     }
 
-    public void printPrintObjects(String format, String reportDir) throws IOException{
-        if(format == "cmd"){
+    public void printPrintObjects(String format, String reportDir) throws IOException {
+        if(Objects.equals(format, "cmd")){
             System.out.println(new PrintMaintenance(maintenance));
             System.out.println(new PrintRegulation(regulation));
             System.out.println(new PrintDesign(design));
-        }else if( format = "text"){
+        }else if(Objects.equals(format, "text")){
             FileWriter fileWriter = new FileWriter(new File(reportDir, "print_summary"));
             PrintWriter printWriter = new PrintWriter(fileWriter);
             printWriter.println(new PrintMaintenance(maintenance));
@@ -52,9 +56,9 @@ public class Project {
     public void printTechDebtObjects(String reportDir) throws IOException{
             FileWriter fileWriter = new FileWriter(new File(reportDir, "tech_debt_objects"));
             PrintWriter printWriter = new PrintWriter(fileWriter);
-            printWriter.println(new Maintenance(maintenance));
-            printWriter.println(new Regulation(regulation));
-            printWriter.println(new Design(design));
+            printWriter.println(maintenance);
+            printWriter.println(regulation);
+            printWriter.println(design);
             printWriter.close();
     }
 

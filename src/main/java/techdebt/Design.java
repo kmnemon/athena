@@ -1,9 +1,14 @@
 package techdebt;
 
+import com.google.gson.Gson;
 import object.Project;
+import pmd.Rulesets;
+import pmd.Tools;
+
+import java.util.List;
 
 public class Design {
-    PrintDesign printDesign;
+    public PrintDesign printDesign;
 
     List<String> designOriginData;
     List<String> multithreadingOriginData;

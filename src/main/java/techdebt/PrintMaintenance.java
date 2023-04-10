@@ -3,7 +3,8 @@ package techdebt;
 
 import com.google.gson.Gson;
 import java.util.Collections;
-
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class PrintMaintenance {
@@ -48,13 +49,11 @@ public class PrintMaintenance {
     }
 
     void setMaxGodClassWithVariable(Maintenance m) {
-        this.maxGodClassWithVariable = m.godClassWithVariables.entrySet().stream()
-                .max((entry1, entry2) -> entry1.getValue() > entry2.getValue() ? 1 : -1).get().getValue();
+        this.maxGodClassWithVariable = getMapMaxValue(m.godClassWithVariables);
     }
 
     void setMaxGodClassWithMethods(Maintenance m) {
-        this.maxGodClassWithMethods = m.godClassWithMethods.entrySet().stream()
-                .max((entry1, entry2) -> entry1.getValue() > entry2.getValue() ? 1 : -1).get().getValue();
+        this.maxGodClassWithMethods = getMapMaxValue(m.godClassWithMethods);
     }
 
     void setSuperMethodsCount(Maintenance m) {
@@ -62,13 +61,11 @@ public class PrintMaintenance {
     }
 
     void setMaxSuperMethodWithParameters(Maintenance m) {
-        this.maxSuperMethodWithParameters = m.superMethodWithParameters.entrySet().stream()
-                .max((entry1, entry2) -> entry1.getValue() > entry2.getValue() ? 1 : -1).get().getValue();
+        this.maxSuperMethodWithParameters = getMapMaxValue(m.superMethodWithParameters);
     }
 
     void setMaxSuperMethodWithLines(Maintenance m) {
-        this.maxSuperMethodWithLines = m.superMethodWithLines.entrySet().stream()
-                .max((entry1, entry2) -> entry1.getValue() > entry2.getValue() ? 1 : -1).get().getValue();
+        this.maxSuperMethodWithLines = getMapMaxValue(m.superMethodWithLines);
     }
 
     void setGoCommentsCount(Maintenance m) {
@@ -76,8 +73,7 @@ public class PrintMaintenance {
     }
 
     void setMaxGodComment(Maintenance m) {
-        this.maxGodComment = m.godComments.entrySet().stream()
-                .max((entry1, entry2) -> entry1.getValue() > entry2.getValue() ? 1 : -1).get().getValue();
+        this.maxGodComment = getMapMaxValue(m.godComments);
     }
 
     void setSuperCyclomaticsCount(Maintenance m) {
@@ -85,8 +81,7 @@ public class PrintMaintenance {
     }
 
     public void setMaxCyclomatic(Maintenance m) {
-        this.maxCyclomatic = m.superCyclomatics.entrySet().stream()
-                .max((entry1, entry2) -> entry1.getValue() > entry2.getValue() ? 1 : -1).get().getValue();
+        this.maxCyclomatic = getMapMaxValue(m.superCyclomatics);
     }
 
     void setSuperDuplicationsCount(Maintenance m) {
@@ -94,7 +89,18 @@ public class PrintMaintenance {
     }
 
     void setMaxDuplication(Maintenance m) {
-        this.maxDuplication = Collections.max(m.superDuplications);
+        if(!m.superDuplications.isEmpty()) {
+            this.maxDuplication = Collections.max(m.superDuplications);
+        }
+    }
+
+    int getMapMaxValue(Map<String, Integer> m) {
+        int value = 0;
+        var ov = m.entrySet().stream().max((entry1, entry2) -> entry1.getValue() > entry2.getValue() ? 1 : -1);
+        if( ov.isPresent()){
+            value = ov.get().getValue();
+        }
+        return value;
     }
 
     @Override

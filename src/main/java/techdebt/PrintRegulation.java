@@ -24,7 +24,7 @@ public class PrintRegulation {
         this.exceptionsCount = r.exceptionOriginData.size();
         this.flowControlsCount = r.flowControlOriginData.size();
         this.namingsCount = r.namingOriginData.size();
-        this.oopsCount = r.oopsCount.size();
+        this.oopsCount = r.oopOriginData.size();
         this.ormsCount = r.ormOriginData.size();
         this.othersCount = r.otherOriginData.size();
         this.setsCount = r.setOriginData.size();
