@@ -39,15 +39,15 @@ public class Project {
 
     public void printPrintObjects(String format, String reportDir) throws IOException {
         if(Objects.equals(format, "cmd")){
-            System.out.println(new PrintMaintenance(maintenance));
-            System.out.println(new PrintRegulation(regulation));
-            System.out.println(new PrintDesign(design));
+            System.out.println(maintenance.printMaintenance);
+            System.out.println(regulation.printRegulation);
+            System.out.println(design.printDesign);
         }else if(Objects.equals(format, "text")){
             FileWriter fileWriter = new FileWriter(new File(reportDir, "print_summary"));
             PrintWriter printWriter = new PrintWriter(fileWriter);
-            printWriter.println(new PrintMaintenance(maintenance));
-            printWriter.println(new PrintRegulation(regulation));
-            printWriter.println(new PrintDesign(design));
+            printWriter.println(maintenance.printMaintenance);
+            printWriter.println(regulation.printRegulation);
+            printWriter.println(design.printDesign);
             printWriter.close();
         }
 

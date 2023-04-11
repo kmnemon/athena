@@ -85,21 +85,28 @@ public class DiffProjectTechDebt {
     private static PrintMaintenance diffPrintMaintenance(PrintMaintenance base, PrintMaintenance target) {
         PrintMaintenance diffPM = new PrintMaintenance();
         diffPM.godClassesCount = target.godClassesCount - base.godClassesCount;
-        diffPM.maxGodClassWithVariable = target.maxGodClassWithVariable - base.maxGodClassWithVariable;
+        diffPM.maxGodClassWithVariables = target.maxGodClassWithVariables - base.maxGodClassWithVariables;
         diffPM.maxGodClassWithMethods = target.maxGodClassWithMethods - base.maxGodClassWithMethods;
+        diffPM.medianGodClassWithVariables = target.medianGodClassWithVariables - base.medianGodClassWithVariables;
+        diffPM.medianGodClassWithMethods = target.medianGodClassWithMethods -base.medianGodClassWithMethods;
 
         diffPM.superMethodsCount = target.superMethodsCount - base.superMethodsCount;
         diffPM.maxSuperMethodWithParameters = target.maxSuperMethodWithParameters - base.maxSuperMethodWithParameters;
         diffPM.maxSuperMethodWithLines = target.maxSuperMethodWithLines - base.maxSuperMethodWithLines;
+        diffPM.medianSuperMethodWithParameters = target.medianSuperMethodWithParameters - base.medianSuperMethodWithParameters;
+        diffPM.medianSuperMethodWithLines = target.medianSuperMethodWithLines - base.medianSuperMethodWithLines;
 
         diffPM.godCommentsCount = target.godCommentsCount - base.godCommentsCount;
         diffPM.maxGodComment = target.maxGodComment - base.maxGodComment;
+        diffPM.medianGodComment = target.medianGodComment - base.medianGodComment;
 
-        diffPM.superCyclomaticsCount = target.superCyclomaticsCount = base.superCyclomaticsCount;
+        diffPM.superCyclomaticsCount = target.superCyclomaticsCount - base.superCyclomaticsCount;
         diffPM.maxCyclomatic = target.maxCyclomatic - base.maxCyclomatic;
+        diffPM.medianCyclomatic = target.medianCyclomatic - base.medianCyclomatic;
 
         diffPM.superDuplicationsCount = target.superDuplicationsCount - base.superDuplicationsCount;
         diffPM.maxDuplication = target.maxDuplication - base.maxDuplication;
+        diffPM.medianDuplication = target.medianDuplication - base.medianDuplication;
         return diffPM;
     }
 
