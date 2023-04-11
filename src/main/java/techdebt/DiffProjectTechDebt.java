@@ -7,13 +7,14 @@ import java.util.*;
 public class DiffProjectTechDebt {
     public static Project diffTechDebtObjects(Project base, Project target) {
         Project diff = new Project("diff-" + base.name + ":" + target.name);
+        //        diff.maintenance = diffMaintenance(base.maintenance, target.maintenance);
+//        diff.regulation = diffRegulation(base.regulation, target.regulation);
+//        diff.design = diffDesign(base.design, target.design);
+
         diff.maintenance.printMaintenance = diffPrintMaintenance(base.maintenance.printMaintenance, target.maintenance.printMaintenance);
         diff.regulation.printRegulation = diffPrintRegulation(base.regulation.printRegulation, target.regulation.printRegulation);
         diff.design.printDesign = diffPrintDesign(base.design.printDesign, target.design.printDesign);
 
-        diff.maintenance = diffMaintenance(base.maintenance, target.maintenance);
-        diff.regulation = diffRegulation(base.regulation, target.regulation);
-        diff.design = diffDesign(base.design, target.design);
 
         return diff;
     }
@@ -57,7 +58,7 @@ public class DiffProjectTechDebt {
         return diffDesign;
     }
 
-    public static<T>  List<T> diffListOnlyInSecond(List<T> base, List<T> target){
+    public static <T> List<T> diffListOnlyInSecond(List<T> base, List<T> target) {
         List<T> diff = new ArrayList<>(target);
         diff.removeAll(base);
         return diff;
@@ -123,9 +124,8 @@ public class DiffProjectTechDebt {
         diffDE.multithreadingsCount = target.multithreadingsCount - base.multithreadingsCount;
         diffDE.performancesCount = target.performancesCount - base.performancesCount;
         diffDE.errorPronesCount = target.errorPronesCount - base.errorPronesCount;
-        return  diffDE;
+        return diffDE;
     }
-
 
 
 }

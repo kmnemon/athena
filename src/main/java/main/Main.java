@@ -23,14 +23,14 @@ public class Main {
         target.printPrintObjects("cmd", reportDir);
         System.out.println();
 
-//        System.out.println("~~~~base summary~~~~");
-//        Project base = Project.parseObjects(baseCodeDir);
-//        base.printPrintObjects("cmd", reportDir);
-//        System.out.println();
-//
-//        System.out.println("~~~~diff summary~~~~");
-//        Project diff = diffTechDebtObjects(base, target);
-//        diff.printPrintObjects("cmd", reportDir);
+        System.out.println("~~~~base summary~~~~");
+        Project base = Project.parseObjects(baseCodeDir);
+        base.printPrintObjects("cmd", reportDir);
+        System.out.println();
+
+        System.out.println("~~~~diff summary~~~~");
+        Project diff = diffTechDebtObjects(base, target);
+        diff.printPrintObjects("cmd", reportDir);
 
     }
 }
