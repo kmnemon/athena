@@ -51,14 +51,26 @@ public class Tools {
         try {
             Process process = Runtime.getRuntime().exec(command);
 
-            BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String line;
 
-            while ((line = stdInput.readLine()) != null) {
-                output.add(line);
+            long startTime = System.currentTimeMillis();
+            long TIMEOUT = 1000 * 60;
+            while (!reader.ready()){
+                if(System.currentTimeMillis() - startTime > TIMEOUT) break;
             }
 
-        } catch (IOException e) {
+            if(reader.ready()) {
+                while ((line = reader.readLine()) != null) {
+                    output.add(line);
+                }
+                process.waitFor();
+                reader.close();
+            }else {
+                log.info("reader failed: " + command);
+            }
+
+        } catch (Exception e) {
             log.error(e.toString());
         }
 
