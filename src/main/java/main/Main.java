@@ -5,32 +5,38 @@ import object.Project;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
-
-import static techdebt.DiffProjectTechDebt.diffTechDebtObjects;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Main {
     private static final Logger log = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) throws IOException {
-        String targetCodeDir = "./src/test/java/testdata/";
-        String baseCodeDir = "./src/test/java/testdata/";
-        String reportDir = "";
+        String reportDir = "/Users/ke/tmp/";
+        new File(reportDir).mkdirs();
 
+        Map<String, String> projectDirs = new HashMap<>();
 
-        System.out.println("~~~~target summary~~~~");
-        Project target = Project.parseObjects(targetCodeDir);
-        target.printPrintObjects("cmd", reportDir);
-        System.out.println();
+        projectDirs.put("./src/test/java/testdata/", "");
 
-        System.out.println("~~~~base summary~~~~");
-        Project base = Project.parseObjects(baseCodeDir);
-        base.printPrintObjects("cmd", reportDir);
-        System.out.println();
+        for(Map.Entry<String, String> pdir : projectDirs.entrySet()) {
 
-        System.out.println("~~~~diff summary~~~~");
-        Project diff = diffTechDebtObjects(base, target);
-        diff.printPrintObjects("cmd", reportDir);
+            Project target = new Project(pdir.getKey(), reportDir);
+            System.out.println("~~~~target begin~~~~");
+            target.parseMaintenanceDebt();
+            target.printMaintenanceStatistics("text");
+
+            target.parseRegulationDebt();
+            target.printRegulationStatistics("text");
+
+            target.parseDesignDebt();
+            target.printDesignStatistics("text");
+            System.out.println("~~~~target finish~~~~");
+
+            System.out.println();
+        }
 
     }
 }

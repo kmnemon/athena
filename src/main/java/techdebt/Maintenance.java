@@ -1,5 +1,6 @@
 package techdebt;
 
+import astfile.Ast;
 import com.google.gson.Gson;
 import object.Class;
 import object.Method;
@@ -16,28 +17,30 @@ import java.util.Map;
 
 public class Maintenance {
     Project p;
-    public PrintMaintenance printMaintenance;
+    public MaintenanceStatistics maintenanceStatistics;
 
-    List<String> cyclomaticOriginData;
-    List<String> duplicationOriginData;
+    public List<String> cyclomaticOriginData;
+    public List<String> duplicationOriginData;
 
 
     //class level
-    Map<String, Integer> godClassWithMethods;
-    Map<String, Integer> godClassWithVariables;
-    Map<String, Integer> godComments;
+    public Map<String, Integer> godClassWithMethods;
+    public Map<String, Integer> godClassWithVariables;
+    public Map<String, Integer> godComments;
 
     //method level
-    Map<String, Integer> superMethodWithParameters;
-    Map<String, Integer> superMethodWithLines;
-    Map<String, Integer> superCyclomatics;
+    public Map<String, Integer> superMethodWithParameters;
+    public Map<String, Integer> superMethodWithLines;
+    public Map<String, Integer> superCyclomatics;
 
-    List<Integer> superDuplications;
+    public List<Integer> superDuplications;
+
 
     private static final Logger log = LoggerFactory.getLogger(Maintenance.class);
 
-
-    public Maintenance(){}
+    public Maintenance(){
+        this.maintenanceStatistics = new MaintenanceStatistics();
+    }
 
     public Maintenance(Project p) {
         this.p = p;
@@ -58,18 +61,20 @@ public class Maintenance {
     }
 
 
-    public void parseMaintenanceTechDebt(String codeDir){
-        generateOriginData(codeDir);
+    public void parseMaintenanceTechDebt(String codeDir, String reportDir){
+        Ast.generateObjectsWithAst(codeDir, p);
+
+        generateOriginData(codeDir, reportDir);
         parseCyclomaticToObject();
         parseDuplication();
 
         parseGodOrSuper();
         
-        generatePrintMaintenance();
+        generateMaintenanceStatistics();
     }
 
-    private void generatePrintMaintenance(){
-        this.printMaintenance = new PrintMaintenance(this);
+    private void generateMaintenanceStatistics(){
+        this.maintenanceStatistics = new MaintenanceStatistics(this);
     }
 
 
@@ -148,9 +153,9 @@ public class Maintenance {
     }
 
     //origin data
-    private void generateOriginData(String codeDir){
-        this.cyclomaticOriginData = Tools.generatePmdOutput(codeDir, Rulesets.CYCLOMATIC.toString());
-        this.duplicationOriginData = Tools.generateCpdOutput(codeDir);
+    private void generateOriginData(String codeDir, String reportDir){
+        this.cyclomaticOriginData = Tools.generatePmdOutput(codeDir, Rulesets.CYCLOMATIC.toString(), reportDir);
+        this.duplicationOriginData = Tools.generateCpdOutput(codeDir, reportDir);
     }
 
 
@@ -231,6 +236,5 @@ public class Maintenance {
             this.superDuplications.add(duplicationLineSize);
         }
     }
-
 
 }

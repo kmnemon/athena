@@ -13,7 +13,7 @@ public class AstTest {
     Ast ast;
     @BeforeEach
     public void setUp(){
-        p = new Project("1");
+        p = new Project("1", "");
         Ast.p = p;
         Ast.astToObjects(Paths.get("./src/test/java//testdata/TestClass.java"));
 

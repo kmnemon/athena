@@ -5,9 +5,9 @@ import org.junit.jupiter.api.Test;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static techdebt.PrintMaintenance.getMedianValue;
+import static techdebt.MaintenanceStatistics.getMedianValue;
 
-public class PrintMaintenanceTest {
+public class MaintenanceStatisticsTest {
     @Test
     public void TestGetMedianValue(){
         Map<String, Integer> m = Map.of(

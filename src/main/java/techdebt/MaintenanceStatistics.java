@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class PrintMaintenance {
+public class MaintenanceStatistics {
     public int godClassesCount;
     public int maxGodClassWithVariables;
     public int maxGodClassWithMethods;
@@ -36,9 +36,8 @@ public class PrintMaintenance {
     public int maxDuplication;
     public int medianDuplication;
 
-    public PrintMaintenance(){}
-
-    public PrintMaintenance(Maintenance m) {
+    public MaintenanceStatistics(){}
+    public MaintenanceStatistics(Maintenance m) {
         setGodClassesCount(m);
         setMaxGodClassWithVariables(m);
         setMaxGodClassWithMethods(m);

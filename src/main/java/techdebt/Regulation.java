@@ -1,33 +1,26 @@
 package techdebt;
 
 import com.google.gson.Gson;
-import object.Project;
 import pmd.Rulesets;
 import pmd.Tools;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Regulation {
-    public PrintRegulation printRegulation;
+    public RegulationStatistics regulationStatistics;
 
-    List<String> commentOriginData;
-    List<String> concurrentOriginData;
-    List<String> constantOriginData;
-    List<String> exceptionOriginData;
-    List<String> flowControlOriginData;
-    List<String> namingOriginData;
-    List<String> oopOriginData;
-    List<String> ormOriginData;
-    List<String> otherOriginData;
-    List<String> setOriginData;
+    public List<String> commentOriginData;
+    public List<String> constantOriginData;
+    public List<String> exceptionOriginData;
+    public List<String> flowControlOriginData;
+    public List<String> namingOriginData;
+    public List<String> oopOriginData;
+    public List<String> setOriginData;
+    public List<String> otherOriginData;
 
-    public Regulation() {}
-
-    public void parseRegulationTechDebt(String codeDir){
-        generateOriginData(codeDir);
-        generatePrintRegulation();
+    public void parseRegulationTechDebt(String codeDir, String reportDir){
+        generateOriginData(codeDir, reportDir);
+        generateRegulationStatistics();
 
     }
 
@@ -36,24 +29,25 @@ public class Regulation {
         return new Gson().toJson(this);
     }
 
+    public Regulation() {
+        this.regulationStatistics = new RegulationStatistics();
+    }
 
     //origin data
-    private void generateOriginData(String codeDir){
-        this.commentOriginData = Tools.generateP3CPmdOutput(codeDir, Rulesets.COMMENT.toString());
-        this.concurrentOriginData = Tools.generateP3CPmdOutput(codeDir, Rulesets.CONCURRENT.toString());
-        this.constantOriginData = Tools.generateP3CPmdOutput(codeDir, Rulesets.CONSTANT.toString());
-        this.exceptionOriginData = Tools.generateP3CPmdOutput(codeDir, Rulesets.EXCEPTION.toString());
-        this.flowControlOriginData = Tools.generateP3CPmdOutput(codeDir, Rulesets.FLOWCONTROL.toString());
-        this.namingOriginData = Tools.generateP3CPmdOutput(codeDir, Rulesets.NAMING.toString());
-        this.oopOriginData = Tools.generateP3CPmdOutput(codeDir, Rulesets.OOP.toString());
-        this.ormOriginData = Tools.generateP3CPmdOutput(codeDir, Rulesets.ORM.toString());
-        this.otherOriginData = Tools.generateP3CPmdOutput(codeDir, Rulesets.OTHER.toString());
-        this.setOriginData = Tools.generateP3CPmdOutput(codeDir, Rulesets.SET.toString());
+    private void generateOriginData(String codeDir, String reportDir){
+        this.commentOriginData = Tools.generateP3CPmdOutput(codeDir, Rulesets.COMMENT.toString(), reportDir);
+        this.constantOriginData = Tools.generateP3CPmdOutput(codeDir, Rulesets.CONSTANT.toString(), reportDir);
+        this.exceptionOriginData = Tools.generateP3CPmdOutput(codeDir, Rulesets.EXCEPTION.toString(), reportDir);
+        this.flowControlOriginData = Tools.generateP3CPmdOutput(codeDir, Rulesets.FLOWCONTROL.toString(), reportDir);
+        this.namingOriginData = Tools.generateP3CPmdOutput(codeDir, Rulesets.NAMING.toString(), reportDir);
+        this.oopOriginData = Tools.generateP3CPmdOutput(codeDir, Rulesets.OOP.toString(), reportDir);
+        this.setOriginData = Tools.generateP3CPmdOutput(codeDir, Rulesets.SET.toString(), reportDir);
+        this.otherOriginData = Tools.generateP3CPmdOutput(codeDir, Rulesets.OTHER.toString(), reportDir);
 
     }
 
-    private void generatePrintRegulation(){
-        this.printRegulation = new PrintRegulation(this);
+    private void generateRegulationStatistics(){
+        this.regulationStatistics = new RegulationStatistics(this);
     }
 
 }
