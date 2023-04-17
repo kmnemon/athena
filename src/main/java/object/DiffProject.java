@@ -113,7 +113,7 @@ public class DiffProject {
     }
 
     private static List<Integer> diffSumValue(List<Integer> base, List<Integer> target){
-        return new ArrayList<>(target.stream().mapToInt(Integer::intValue).sum() - base.stream().mapToInt(Integer::intValue).sum());
+        return List.of(target.stream().mapToInt(Integer::intValue).sum() - base.stream().mapToInt(Integer::intValue).sum());
 
     }
 
