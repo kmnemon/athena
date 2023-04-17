@@ -35,14 +35,14 @@ public class Regulation {
 
     //origin data
     private void generateOriginData(String codeDir, String reportDir){
-        this.commentOriginData = Tools.generateP3CPmdOutput(codeDir, Rulesets.COMMENT.toString(), reportDir);
-        this.constantOriginData = Tools.generateP3CPmdOutput(codeDir, Rulesets.CONSTANT.toString(), reportDir);
-        this.exceptionOriginData = Tools.generateP3CPmdOutput(codeDir, Rulesets.EXCEPTION.toString(), reportDir);
-        this.flowControlOriginData = Tools.generateP3CPmdOutput(codeDir, Rulesets.FLOWCONTROL.toString(), reportDir);
-        this.namingOriginData = Tools.generateP3CPmdOutput(codeDir, Rulesets.NAMING.toString(), reportDir);
-        this.oopOriginData = Tools.generateP3CPmdOutput(codeDir, Rulesets.OOP.toString(), reportDir);
-        this.setOriginData = Tools.generateP3CPmdOutput(codeDir, Rulesets.SET.toString(), reportDir);
-        this.otherOriginData = Tools.generateP3CPmdOutput(codeDir, Rulesets.OTHER.toString(), reportDir);
+        this.commentOriginData = Tools.generateP3COutput(codeDir, Rulesets.COMMENT.toString(), reportDir);
+        this.constantOriginData = Tools.generateP3COutput(codeDir, Rulesets.CONSTANT.toString(), reportDir);
+        this.exceptionOriginData = Tools.generateP3COutput(codeDir, Rulesets.EXCEPTION.toString(), reportDir);
+        this.flowControlOriginData = Tools.generateP3COutput(codeDir, Rulesets.FLOWCONTROL.toString(), reportDir);
+        this.namingOriginData = Tools.generateP3COutput(codeDir, Rulesets.NAMING.toString(), reportDir);
+        this.oopOriginData = Tools.generateP3COutput(codeDir, Rulesets.OOP.toString(), reportDir);
+        this.setOriginData = Tools.generateP3COutput(codeDir, Rulesets.SET.toString(), reportDir);
+        this.otherOriginData = Tools.generateP3COutput(codeDir, Rulesets.OTHER.toString(), reportDir);
 
     }
 

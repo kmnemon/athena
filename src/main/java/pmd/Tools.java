@@ -19,7 +19,7 @@ public class Tools {
         return pmdDir + " -d " + codeDir + " -f text -R " + ruleset + " >" + report;
     }
 
-    private static String getP3CPmdCommand(String codeDir, String ruleset) {
+    private static String getP3CCommand(String codeDir, String ruleset) {
         //String  pmdDir = "java -cp .\\tools\\p3c-pmd\\p3c-pmd.jar net.sourceforge.pmd.PMD -e UTF-8";
         String pmdDir = "java -cp ./tools/p3c-pmd/p3c-pmd.jar net.sourceforge.pmd.PMD -e UTF-8";
         return pmdDir + " -d " + codeDir + " -f text -R " + ruleset;
@@ -31,7 +31,7 @@ public class Tools {
         String minimumTokens = "100";
         String language = "java";
         String encoding = "utf8";
-        return cpdDir + " --minimum-tokens " + minimumTokens + " --files " + codeDir + " --language " + language + " --encoding " + encoding + " >" + report;
+        return cpdDir + " --minimum-tokens " + minimumTokens + " --files " + codeDir + " --language " + language + " --encoding " + encoding;
     }
 
     public static String generateReportPathStr(String codeDir, String rulesets, String reportDir) {
@@ -44,20 +44,20 @@ public class Tools {
 
     public static List<String> generatePmdOutput(String codeDir, String ruleset, String reportDir) {
         String report = generateReportPathStr(codeDir, ruleset, reportDir);
-        return generatePmdOrCpdOutput(getPmdCommand(codeDir, ruleset, report), report);
+        return generateOutputWriteFileFirst(getPmdCommand(codeDir, ruleset, report), report);
     }
 
-    public static List<String> generateP3CPmdOutput(String codeDir, String ruleset, String reportDir) {
+    public static List<String> generateP3COutput(String codeDir, String ruleset, String reportDir) {
         String report = generateReportPathStr(codeDir, ruleset, reportDir);
-        return generateP3COutput(getP3CPmdCommand(codeDir, ruleset), report);
+        return generateOutputWriteObjectFirst(getP3CCommand(codeDir, ruleset), report);
     }
 
     public static List<String> generateCpdOutput(String codeDir, String reportDir) {
         String report = generateReportPathStr(codeDir, "duplication", reportDir);
-        return generatePmdOrCpdOutput(getCpdCommand(codeDir, report), report);
+        return generateOutputWriteFileFirst(getCpdCommand(codeDir, report), report);
     }
 
-    private static List<String> generatePmdOrCpdOutput(String command, String report) {
+    private static List<String> generateOutputWriteFileFirst(String command, String report) {
         List<String> output = new ArrayList<>();
 
         try {
@@ -79,7 +79,7 @@ public class Tools {
         return output;
     }
 
-    private static List<String> generateP3COutput(String command, String report) {
+    private static List<String> generateOutputWriteObjectFirst(String command, String report) {
         List<String> output = new ArrayList<>();
 
         try {
