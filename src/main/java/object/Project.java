@@ -1,11 +1,9 @@
 package object;
 
-import astfile.Ast;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import techdebt.*;
 
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -32,13 +30,15 @@ public class Project {
     public Project(String codeDir, String reportDir) {
         this.name = codeDir;
         this.packages = new HashMap<>();
+
         this.maintenance = new Maintenance(this);
         this.regulation = new Regulation();
         this.design = new Design();
 
         this.codeDir = codeDir;
         this.reportDir = reportDir;
-        this.printWriter = getPrintWriter();
+
+        this.printWriter = getPrintWriter(generateReportPathStr(this.codeDir, "summary", this.reportDir));
     }
 
     public void parseObjects() {
@@ -87,12 +87,10 @@ public class Project {
         }
     }
 
-    private PrintWriter getPrintWriter() {
+    public static PrintWriter getPrintWriter(String pathStr) {
         PrintWriter printWriter = null;
-        String pathStr = generateReportPathStr(codeDir, "", reportDir);
-
         try {
-            printWriter = new PrintWriter(new FileWriter(pathStr + "summary"));
+            printWriter = new PrintWriter(new FileWriter(pathStr));
         }catch (IOException e){
             log.info("new FileWriter failed");
         }

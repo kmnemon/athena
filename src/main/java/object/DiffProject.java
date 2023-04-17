@@ -1,15 +1,13 @@
 package object;
 
 import com.google.gson.Gson;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.google.gson.GsonBuilder;
 import techdebt.*;
 
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
 
+import static object.Project.getPrintWriter;
 import static pmd.Tools.generateReportPathStr;
 
 public class DiffProject {
@@ -22,9 +20,6 @@ public class DiffProject {
     public Design design;
 
     transient public String reportDir;
-
-    private static final Logger log = LoggerFactory.getLogger(DiffProject.class);
-
 
     public DiffProject(String name, Project base, Project target, String reportDir) {
         this.name = name;
@@ -40,7 +35,7 @@ public class DiffProject {
 
     @Override
     public String toString(){
-        return new Gson().toJson(this);
+        return new GsonBuilder().setPrettyPrinting().create().toJson(this);
     }
 
     public void diffTechDebtObjectStatistics() {
@@ -57,7 +52,6 @@ public class DiffProject {
     //Maintenance, regulation, design only increase data
     private void diffMaintenance() {
         this.maintenance.cyclomaticOriginData = diffListOnlyInSecond(base.maintenance.cyclomaticOriginData, target.maintenance.cyclomaticOriginData);
-        //duplicationOriginData diff value is not accurate
         this.maintenance.duplicationOriginData = diffListOnlyInSecond(base.maintenance.duplicationOriginData, target.maintenance.duplicationOriginData);
         //if sum change
         this.maintenance.superDuplications = diffSumValue(base.maintenance.superDuplications, target.maintenance.superDuplications);
@@ -88,6 +82,10 @@ public class DiffProject {
     }
 
     public static <T> List<T> diffListOnlyInSecond(List<T> base, List<T> target) {
+        if (target == null){
+            return new ArrayList<>();
+        }
+
         List<T> diff = new ArrayList<>(target);
         diff.removeAll(base);
         return diff;
@@ -95,6 +93,10 @@ public class DiffProject {
 
 
     private static Map<String, Integer> diffMapOnlyIncreaseInSecondMap(Map<String, Integer> base, Map<String, Integer> target) {
+        if(target == null){
+            return new HashMap<>();
+        }
+
         Map<String, Integer> diffMap = new HashMap<>();
         for (Map.Entry<String, Integer> entry : target.entrySet()) {
             if (base.containsKey(entry.getKey())) {
@@ -115,48 +117,17 @@ public class DiffProject {
 
     }
 
-    //diffPrint contain increase and decrease
+    //diffPrint contain only changes
     private void diffMaintenanceStatistics() {
-        this.maintenance.maintenanceStatistics.godClassesCount = target.maintenance.maintenanceStatistics.godClassesCount - base.maintenance.maintenanceStatistics.godClassesCount;
-        this.maintenance.maintenanceStatistics.maxGodClassWithVariables = target.maintenance.maintenanceStatistics.maxGodClassWithVariables - base.maintenance.maintenanceStatistics.maxGodClassWithVariables;
-        this.maintenance.maintenanceStatistics.maxGodClassWithMethods = target.maintenance.maintenanceStatistics.maxGodClassWithMethods - base.maintenance.maintenanceStatistics.maxGodClassWithMethods;
-        this.maintenance.maintenanceStatistics.medianGodClassWithVariables = target.maintenance.maintenanceStatistics.medianGodClassWithVariables - base.maintenance.maintenanceStatistics.medianGodClassWithVariables;
-        this.maintenance.maintenanceStatistics.medianGodClassWithMethods = target.maintenance.maintenanceStatistics.medianGodClassWithMethods -base.maintenance.maintenanceStatistics.medianGodClassWithMethods;
-
-        this.maintenance.maintenanceStatistics.superMethodsCount = target.maintenance.maintenanceStatistics.superMethodsCount - base.maintenance.maintenanceStatistics.superMethodsCount;
-        this.maintenance.maintenanceStatistics.maxSuperMethodWithParameters = target.maintenance.maintenanceStatistics.maxSuperMethodWithParameters - base.maintenance.maintenanceStatistics.maxSuperMethodWithParameters;
-        this.maintenance.maintenanceStatistics.maxSuperMethodWithLines = target.maintenance.maintenanceStatistics.maxSuperMethodWithLines - base.maintenance.maintenanceStatistics.maxSuperMethodWithLines;
-        this.maintenance.maintenanceStatistics.medianSuperMethodWithParameters = target.maintenance.maintenanceStatistics.medianSuperMethodWithParameters - base.maintenance.maintenanceStatistics.medianSuperMethodWithParameters;
-        this.maintenance.maintenanceStatistics.medianSuperMethodWithLines = target.maintenance.maintenanceStatistics.medianSuperMethodWithLines - base.maintenance.maintenanceStatistics.medianSuperMethodWithLines;
-
-        this.maintenance.maintenanceStatistics.godCommentsCount = target.maintenance.maintenanceStatistics.godCommentsCount - base.maintenance.maintenanceStatistics.godCommentsCount;
-        this.maintenance.maintenanceStatistics.maxGodComment = target.maintenance.maintenanceStatistics.maxGodComment - base.maintenance.maintenanceStatistics.maxGodComment;
-        this.maintenance.maintenanceStatistics.medianGodComment = target.maintenance.maintenanceStatistics.medianGodComment - base.maintenance.maintenanceStatistics.medianGodComment;
-
-        this.maintenance.maintenanceStatistics.superCyclomaticsCount = target.maintenance.maintenanceStatistics.superCyclomaticsCount - base.maintenance.maintenanceStatistics.superCyclomaticsCount;
-        this.maintenance.maintenanceStatistics.maxCyclomatic = target.maintenance.maintenanceStatistics.maxCyclomatic - base.maintenance.maintenanceStatistics.maxCyclomatic;
-        this.maintenance.maintenanceStatistics.medianCyclomatic = target.maintenance.maintenanceStatistics.medianCyclomatic - base.maintenance.maintenanceStatistics.medianCyclomatic;
-
-        this.maintenance.maintenanceStatistics.superDuplicationsCount = target.maintenance.maintenanceStatistics.superDuplicationsCount - base.maintenance.maintenanceStatistics.superDuplicationsCount;
-        this.maintenance.maintenanceStatistics.maxDuplication = target.maintenance.maintenanceStatistics.maxDuplication - base.maintenance.maintenanceStatistics.maxDuplication;
-        this.maintenance.maintenanceStatistics.medianDuplication = target.maintenance.maintenanceStatistics.medianDuplication - base.maintenance.maintenanceStatistics.medianDuplication;
+        this.maintenance.generateMaintenanceStatistics();
     }
 
     private void diffRegulationStatistics() {
-        this.regulation.regulationStatistics.commentsCount = target.regulation.regulationStatistics.commentsCount - base.regulation.regulationStatistics.commentsCount;
-        this.regulation.regulationStatistics.constantsCount = target.regulation.regulationStatistics.constantsCount - base.regulation.regulationStatistics.constantsCount;
-        this.regulation.regulationStatistics.exceptionsCount = target.regulation.regulationStatistics.exceptionsCount - base.regulation.regulationStatistics.exceptionsCount;
-        this.regulation.regulationStatistics.flowControlsCount = target.regulation.regulationStatistics.flowControlsCount - base.regulation.regulationStatistics.flowControlsCount;
-        this.regulation.regulationStatistics.namingsCount = target.regulation.regulationStatistics.namingsCount - base.regulation.regulationStatistics.namingsCount;
-        this.regulation.regulationStatistics.oopsCount = target.regulation.regulationStatistics.oopsCount - base.regulation.regulationStatistics.oopsCount;
-        this.regulation.regulationStatistics.setsCount = target.regulation.regulationStatistics.setsCount - base.regulation.regulationStatistics.setsCount;
-        this.regulation.regulationStatistics.othersCount = target.regulation.regulationStatistics.othersCount - base.regulation.regulationStatistics.othersCount;
+        this.regulation.generateRegulationStatistics();
     }
 
     private void diffDesignStatistics() {
-        this.design.designStatistics.designsCount = target.design.designStatistics.designsCount - base.design.designStatistics.designsCount;
-        this.design.designStatistics.multithreadingsCount = target.design.designStatistics.multithreadingsCount - base.design.designStatistics.multithreadingsCount;
-        this.design.designStatistics.performancesCount = target.design.designStatistics.performancesCount - base.design.designStatistics.performancesCount;
+        this.design.generateDesignStatistics();
     }
 
 
@@ -164,22 +135,11 @@ public class DiffProject {
         if (Objects.equals(format, "cmd")) {
             System.out.println(this);
         } else if (Objects.equals(format, "text")) {
-            PrintWriter printWriter = getPrintWriter();
+            String pathStr = generateReportPathStr("", "diff--summary", reportDir);
+
+            PrintWriter printWriter = getPrintWriter(pathStr);
             printWriter.println(this);
             printWriter.close();
         }
-    }
-
-    private PrintWriter getPrintWriter() {
-        PrintWriter printWriter = null;
-        String pathStr = generateReportPathStr("diff", "", reportDir);
-
-        try {
-            printWriter = new PrintWriter(new FileWriter(pathStr + "summary"));
-        }catch (IOException e){
-            log.info("new FileWriter failed");
-        }
-        assert printWriter != null;
-        return printWriter;
     }
 }

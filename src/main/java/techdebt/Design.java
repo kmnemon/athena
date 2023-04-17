@@ -1,9 +1,11 @@
 package techdebt;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import pmd.Rulesets;
 import pmd.Tools;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Design {
@@ -15,7 +17,7 @@ public class Design {
 
     @Override
     public String toString(){
-        return new Gson().toJson(this);
+        return new GsonBuilder().setPrettyPrinting().create().toJson(this);
     }
 
     public Design(){
@@ -36,7 +38,7 @@ public class Design {
         this.performanceOriginData = Tools.generatePmdOutput(codeDir, Rulesets.PERFORMANCE.toString(), reportDir);
     }
 
-    private void generateDesignStatistics(){
+    public void generateDesignStatistics(){
         this.designStatistics = new DesignStatistics(this);
     }
 

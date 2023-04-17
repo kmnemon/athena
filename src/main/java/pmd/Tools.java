@@ -13,10 +13,10 @@ import java.util.concurrent.TimeUnit;
 public class Tools {
     private static final Logger log = LoggerFactory.getLogger(Tools.class);
 
-    private static String getPmdCommand(String codeDir, String ruleset, String report) {
+    private static String getPmdCommand(String codeDir, String ruleset) {
 //        String pmdDir = ".\\tools\\pmd-bin-6.55.0\\bin\\pmd.bat";
         String pmdDir = "./tools/pmd-bin-6.55.0/bin/pmd.bat";
-        return pmdDir + " -d " + codeDir + " -f text -R " + ruleset + " >" + report;
+        return pmdDir + " -d " + codeDir + " -f text -R " + ruleset;
     }
 
     private static String getP3CCommand(String codeDir, String ruleset) {
@@ -25,7 +25,7 @@ public class Tools {
         return pmdDir + " -d " + codeDir + " -f text -R " + ruleset;
     }
 
-    private static String getCpdCommand(String codeDir, String report) {
+    private static String getCpdCommand(String codeDir) {
 //        String cpdDir = ".\\tools\\pmd-bin-6.55.0\\bin\\cpd.bat";
         String cpdDir = "./tools/pmd-bin-6.55.0/bin/cpd.bat";
         String minimumTokens = "100";
@@ -45,7 +45,7 @@ public class Tools {
 
     public static List<String> generatePmdOutput(String codeDir, String ruleset, String reportDir) {
         String report = generateReportPathStr(codeDir, ruleset, reportDir);
-        return generateOutputWriteFileFirst(getPmdCommand(codeDir, ruleset, report), report);
+        return generateOutputWriteObjectFirst(getPmdCommand(codeDir, ruleset), report);
     }
 
     public static List<String> generateP3COutput(String codeDir, String ruleset, String reportDir) {
@@ -55,7 +55,7 @@ public class Tools {
 
     public static List<String> generateCpdOutput(String codeDir, String reportDir) {
         String report = generateReportPathStr(codeDir, "duplication", reportDir);
-        return generateOutputWriteFileFirst(getCpdCommand(codeDir, report), report);
+        return generateOutputWriteObjectFirst(getCpdCommand(codeDir), report);
     }
 
     private static List<String> generateOutputWriteFileFirst(String command, String report) {
@@ -86,13 +86,19 @@ public class Tools {
         try {
             Process process = Runtime.getRuntime().exec(command);
 
-            BufferedWriter writer = new BufferedWriter((new FileWriter(new File(report))));
+            BufferedWriter writer = new BufferedWriter((new FileWriter(report)));
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
             Thread inputStreamReader = new Thread(()->{
                try{
                    String line;
                    while ((line = reader.readLine())!= null){
+                       String prefix = "/src/main/java";
+                       if(line.contains(prefix)){
+                           int index = line.indexOf(prefix);
+                           line = line.substring(index);
+                       }
+
                        output.add(line);
                        writer.write(line);
                        writer.newLine();

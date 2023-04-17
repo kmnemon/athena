@@ -2,6 +2,7 @@ package techdebt;
 
 import astfile.Ast;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import object.Class;
 import object.Method;
 import object.Project;
@@ -57,7 +58,7 @@ public class Maintenance {
 
     @Override
     public String toString(){
-        return new Gson().toJson(this);
+        return new GsonBuilder().setPrettyPrinting().create().toJson(this);
     }
 
 
@@ -73,7 +74,7 @@ public class Maintenance {
         generateMaintenanceStatistics();
     }
 
-    private void generateMaintenanceStatistics(){
+    public void generateMaintenanceStatistics(){
         this.maintenanceStatistics = new MaintenanceStatistics(this);
     }
 

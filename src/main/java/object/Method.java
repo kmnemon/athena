@@ -1,7 +1,5 @@
 package object;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class Method {
     public String name;

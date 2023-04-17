@@ -3,21 +3,23 @@ package main;
 
 import object.DiffProject;
 import object.Project;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 
 import java.io.File;
-import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+import java.util.function.Predicate;
 
 public class Main {
     public static void main(String[] args) {
         String reportDir = "/Users/ke/tmp/";
-        new File(reportDir).mkdirs();
+        if( !new File(reportDir).mkdirs()){
+            deleteDirectory(reportDir);
+        }
 
         Map<String, String> projectDirs = new HashMap<>();
-
         projectDirs.put("./src/test/java/testdata/", "");
 
         for(Map.Entry<String, String> pdir : projectDirs.entrySet()) {
@@ -59,5 +61,11 @@ public class Main {
 
         }
 
+    }
+
+    public static void deleteDirectory(String dir) {
+        Arrays.stream(Objects.requireNonNull(new File(dir).listFiles()))
+                .filter(Predicate.not(File::isDirectory))
+                .forEach(File::delete);
     }
 }

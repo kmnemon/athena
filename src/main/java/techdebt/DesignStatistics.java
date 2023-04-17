@@ -1,6 +1,7 @@
 package techdebt;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 public class DesignStatistics {
     public int designsCount;
@@ -15,7 +16,7 @@ public class DesignStatistics {
 
     @Override
     public String toString(){
-        return new Gson().toJson(this);
+        return new GsonBuilder().setPrettyPrinting().create().toJson(this);
     }
 
     public DesignStatistics() {
