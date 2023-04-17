@@ -59,52 +59,32 @@ public class Project {
         this.design.parseDesignTechDebt(this.codeDir, this.reportDir);
     }
 
-    public void printMaintenanceStatistics(String format) throws IOException {
+    public void printMaintenanceStatistics(String format){
         if (Objects.equals(format, "cmd")) {
             System.out.println(this.maintenance.maintenanceStatistics);
         } else if (Objects.equals(format, "text")) {
             printWriter.println(this.maintenance.maintenanceStatistics);
+            printWriter.flush();
         }
 
     }
 
-    public void printRegulationStatistics(String format) throws IOException {
+    public void printRegulationStatistics(String format) {
         if (Objects.equals(format, "cmd")) {
             System.out.println(this.regulation.regulationStatistics);
         } else if (Objects.equals(format, "text")) {
             printWriter.println(this.regulation.regulationStatistics);
+            printWriter.flush();
         }
     }
 
-    public void printDesignStatistics(String format) throws IOException {
+    public void printDesignStatistics(String format) {
         if (Objects.equals(format, "cmd")) {
             System.out.println(this.design.designStatistics);
         } else if (Objects.equals(format, "text")) {
             printWriter.println(this.design.designStatistics);
+            printWriter.flush();
         }
-    }
-
-    public void printObjectStatistics(String format) throws IOException {
-        if (Objects.equals(format, "cmd")) {
-            System.out.println(this.maintenance.maintenanceStatistics);
-            System.out.println(this.regulation.regulationStatistics);
-            System.out.println(this.design.designStatistics);
-        } else if (Objects.equals(format, "text")) {
-            printWriter.println(this.maintenance.maintenanceStatistics);
-            printWriter.println(this.regulation.regulationStatistics);
-            printWriter.println(this.design.designStatistics);
-            printWriter.close();
-        }
-
-    }
-
-    public void printTechDebtObjects(String reportDir) throws IOException {
-        FileWriter fileWriter = new FileWriter(new File(reportDir, "tech_debt_objects"));
-        PrintWriter printWriter = new PrintWriter(fileWriter);
-        printWriter.println(maintenance);
-        printWriter.println(regulation);
-        printWriter.println(design);
-        printWriter.close();
     }
 
     private PrintWriter getPrintWriter() {

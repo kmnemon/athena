@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Maintenance {
-    Project p;
+    transient Project p;
     public MaintenanceStatistics maintenanceStatistics;
 
     public List<String> cyclomaticOriginData;

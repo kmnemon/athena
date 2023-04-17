@@ -1,35 +1,52 @@
 package object;
 
+import com.google.gson.Gson;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import techdebt.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.*;
+
+import static pmd.Tools.generateReportPathStr;
 
 public class DiffProject {
     public String name;
-    Project base;
-    Project target;
+    transient Project base;
+    transient Project target;
 
     public Maintenance maintenance;
     public Regulation regulation;
     public Design design;
 
-    public DiffProject(String name, Project base, Project target) {
+    transient public String reportDir;
+
+    private static final Logger log = LoggerFactory.getLogger(DiffProject.class);
+
+
+    public DiffProject(String name, Project base, Project target, String reportDir) {
         this.name = name;
         this.base = base;
         this.target = target;
 
-//        this.maintenance = new Maintenance();
+        this.maintenance = new Maintenance();
         this.regulation = new Regulation();
         this.design = new Design();
+
+        this.reportDir = reportDir;
+    }
+
+    @Override
+    public String toString(){
+        return new Gson().toJson(this);
     }
 
     public void diffTechDebtObjectStatistics() {
-//        diffMaintenance();
-//        diffRegulation();
-//        diffDesign();
+        this.diffMaintenance();
+        this.diffRegulation();
+        this.diffDesign();
 
         this.diffMaintenanceStatistics();
         this.diffRegulationStatistics();
@@ -40,8 +57,11 @@ public class DiffProject {
     //Maintenance, regulation, design only increase data
     private void diffMaintenance() {
         this.maintenance.cyclomaticOriginData = diffListOnlyInSecond(base.maintenance.cyclomaticOriginData, target.maintenance.cyclomaticOriginData);
-        //duplicationOriginData diff value useless
-        this.maintenance.superDuplications = diffListOnlyInSecond(base.maintenance.superDuplications, target.maintenance.superDuplications);
+        //duplicationOriginData diff value is not accurate
+        this.maintenance.duplicationOriginData = diffListOnlyInSecond(base.maintenance.duplicationOriginData, target.maintenance.duplicationOriginData);
+        //if sum change
+        this.maintenance.superDuplications = diffSumValue(base.maintenance.superDuplications, target.maintenance.superDuplications);
+
         this.maintenance.godClassWithMethods = diffMapOnlyIncreaseInSecondMap(base.maintenance.godClassWithMethods, target.maintenance.godClassWithMethods);
         this.maintenance.godClassWithVariables = diffMapOnlyIncreaseInSecondMap(base.maintenance.godClassWithVariables, target.maintenance.godClassWithVariables);
         this.maintenance.godComments = diffMapOnlyIncreaseInSecondMap(base.maintenance.godComments, target.maintenance.godComments);
@@ -90,6 +110,11 @@ public class DiffProject {
         return diffMap;
     }
 
+    private static List<Integer> diffSumValue(List<Integer> base, List<Integer> target){
+        return new ArrayList<>(target.stream().mapToInt(Integer::intValue).sum() - base.stream().mapToInt(Integer::intValue).sum());
+
+    }
+
     //diffPrint contain increase and decrease
     private void diffMaintenanceStatistics() {
         this.maintenance.maintenanceStatistics.godClassesCount = target.maintenance.maintenanceStatistics.godClassesCount - base.maintenance.maintenanceStatistics.godClassesCount;
@@ -132,5 +157,29 @@ public class DiffProject {
         this.design.designStatistics.designsCount = target.design.designStatistics.designsCount - base.design.designStatistics.designsCount;
         this.design.designStatistics.multithreadingsCount = target.design.designStatistics.multithreadingsCount - base.design.designStatistics.multithreadingsCount;
         this.design.designStatistics.performancesCount = target.design.designStatistics.performancesCount - base.design.designStatistics.performancesCount;
+    }
+
+
+    public void printDiffProject(String format) {
+        if (Objects.equals(format, "cmd")) {
+            System.out.println(this);
+        } else if (Objects.equals(format, "text")) {
+            PrintWriter printWriter = getPrintWriter();
+            printWriter.println(this);
+            printWriter.close();
+        }
+    }
+
+    private PrintWriter getPrintWriter() {
+        PrintWriter printWriter = null;
+        String pathStr = generateReportPathStr("diff", "", reportDir);
+
+        try {
+            printWriter = new PrintWriter(new FileWriter(pathStr + "summary"));
+        }catch (IOException e){
+            log.info("new FileWriter failed");
+        }
+        assert printWriter != null;
+        return printWriter;
     }
 }

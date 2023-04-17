@@ -40,6 +40,7 @@ public class Tools {
         name = name.replace("\\", "_");
         name = name.replace(":", "");
         return reportDir + name;
+
     }
 
     public static List<String> generatePmdOutput(String codeDir, String ruleset, String reportDir) {
