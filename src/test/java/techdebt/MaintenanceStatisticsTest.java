@@ -9,7 +9,7 @@ import static techdebt.MaintenanceStatistics.getMedianValue;
 
 public class MaintenanceStatisticsTest {
     @Test
-    public void TestGetMedianValue(){
+    public void testGetMedianValue(){
         Map<String, Integer> m = Map.of(
                 "A", 3,
                 "B", 6,

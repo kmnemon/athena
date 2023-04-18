@@ -54,7 +54,7 @@ public class Main {
 
             System.out.println("~~~~diff begin~~~~");
             DiffProject dp = new DiffProject("diff", base, target, reportDir);
-            dp.diffTechDebtObjectStatistics();
+            dp.diffTechDebtObject();
             dp.printDiffProject("text");
 
             System.out.println("~~~~diff finish~~~~");

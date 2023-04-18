@@ -7,7 +7,7 @@ import static pmd.Tools.generateReportPathStr;
 
 public class ToolsTest {
     @Test
-    void TestGenerateReportFileName(){
+    void testGenerateReportFileName(){
         String s = generateReportPathStr("D:\\123", "rulesets/java", "D:\\supprt\\2\\");
 
         assertEquals("D:\\supprt\\2\\rulesets_java-D_123", s);

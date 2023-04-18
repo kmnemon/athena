@@ -89,32 +89,28 @@ public class Tools {
             BufferedWriter writer = new BufferedWriter((new FileWriter(report)));
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
-            Thread inputStreamReader = new Thread(()->{
-               try{
-                   String line;
-                   while ((line = reader.readLine())!= null){
-                       String prefix = "/src/main/java";
-                       if(line.contains(prefix)){
-                           int index = line.indexOf(prefix);
-                           line = line.substring(index);
-                       }
+            Thread inputStreamReader = new Thread(() -> {
+                try {
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        line = getRelativePath(line);
 
-                       output.add(line);
-                       writer.write(line);
-                       writer.newLine();
-                   }
+                        output.add(line);
+                        writer.write(line);
+                        writer.newLine();
+                    }
 
-                   writer.close();
+                    writer.close();
 
-               }catch (IOException e){
-                   log.info("p3c failed: " + command);
-                   e.printStackTrace();
-               }
+                } catch (IOException e) {
+                    log.info("p3c failed: " + command);
+                    e.printStackTrace();
+                }
             });
 
             inputStreamReader.start();
             boolean completed = process.waitFor(60, TimeUnit.SECONDS);
-            if(!completed){
+            if (!completed) {
                 log.info("p3c failed: " + command);
                 process.destroy();
             }
@@ -126,5 +122,20 @@ public class Tools {
         }
 
         return output;
+    }
+
+    private static String getRelativePath(String line) {
+        String prefixSrc = "/src/main/java";
+        String prefixTest = "/src/test/java";
+
+        int indexSrc = line.indexOf(prefixSrc);
+        int indexTest = line.indexOf(prefixTest);
+
+        if (indexSrc != -1) {
+            line = line.substring(indexSrc);
+        } else if (indexTest != -1) {
+            line = line.substring(indexTest);
+        }
+        return line;
     }
 }
