@@ -11,8 +11,8 @@ public class RegulationStatistics {
     public int flowControlsCount;
     public int namingsCount;
     public int oopsCount;
-    public int othersCount;
     public int setsCount;
+    public int othersCount;
 
     public RegulationStatistics() {
     }
@@ -24,8 +24,8 @@ public class RegulationStatistics {
         this.flowControlsCount = r.flowControlOriginData.size();
         this.namingsCount = r.namingOriginData.size();
         this.oopsCount = r.oopOriginData.size();
-        this.othersCount = r.otherOriginData.size();
         this.setsCount = r.setOriginData.size();
+        this.othersCount = r.otherOriginData.size();
     }
 
     

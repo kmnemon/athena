@@ -163,7 +163,10 @@ public class MaintenanceStatistics {
             return 0;
         }
 
-        List<Integer> list = new ArrayList<>(m.values());
+        List<Integer> list = new ArrayList<>();
+        for( var v : m.entrySet()) {
+            list.add(v.getValue());
+        }
         Collections.sort(list);
         return list.get(list.size() / 2);
     }
