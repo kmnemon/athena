@@ -6,23 +6,21 @@ import object.Project;
 
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.function.Predicate;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.*;
 
 public class Main {
-    public static void main(String[] args) {
-        String reportDir = "/Users/ke/tmp/";
-        if( !new File(reportDir).mkdirs()){
-            deleteDirectory(reportDir);
-        }
+    static Map<String, String> projectDirs = new HashMap<>();
 
-        Map<String, String> projectDirs = new HashMap<>();
+    public static void main(String[] args) {
+        String reportDir = "/Users/ke/tmp";
         projectDirs.put("./src/test/java/testdata/", "");
 
         for(Map.Entry<String, String> pdir : projectDirs.entrySet()) {
+            createOrCleanReportDir(pdir.getKey(), reportDir);
+            createOrCleanReportDir(pdir.getValue(), reportDir);
 
             System.out.println("~~~~target begin~~~~");
             Project target = new Project(pdir.getKey(), reportDir);
@@ -53,7 +51,7 @@ public class Main {
             System.out.println();//-------------------------//
 
             System.out.println("~~~~diff begin~~~~");
-            DiffProject dp = new DiffProject("diff", base, target, reportDir);
+            DiffProject dp = new DiffProject(pdir.getValue(), base, target, reportDir);
             dp.diffTechDebtObject();
             dp.printDiffProject("text");
 
@@ -63,9 +61,27 @@ public class Main {
 
     }
 
-    public static void deleteDirectory(String dir) {
-        Arrays.stream(Objects.requireNonNull(new File(dir).listFiles()))
-                .filter(Predicate.not(File::isDirectory))
-                .forEach(File::delete);
+    private static void createOrCleanReportDir(String codeDir, String reportDir) {
+        codeDir = codeDir.replace("/", "_");
+        codeDir = codeDir.replace("\\", "_");
+        codeDir = codeDir.replace(":", "");
+
+        File directory = new File(reportDir + codeDir);
+        if(directory.exists()){
+            deleteDirectory(reportDir + codeDir);
+        }
+
     }
+
+    public static void deleteDirectory(String dir) {
+        try{
+            Files.walk(Path.of(dir))
+                    .sorted(Comparator.reverseOrder())
+                    .map(Path::toFile)
+                    .forEach(File::delete);
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
 }

@@ -71,26 +71,26 @@ public class DiffProject {
         maintenanceChange.maintenanceStatistics.godClassesCount = target.maintenance.maintenanceStatistics.godClassesCount - base.maintenance.maintenanceStatistics.godClassesCount;
         maintenanceChange.maintenanceStatistics.maxGodClassWithVariables = target.maintenance.maintenanceStatistics.maxGodClassWithVariables - base.maintenance.maintenanceStatistics.maxGodClassWithVariables;
         maintenanceChange.maintenanceStatistics.maxGodClassWithMethods = target.maintenance.maintenanceStatistics.maxGodClassWithMethods - base.maintenance.maintenanceStatistics.maxGodClassWithMethods;
-        maintenanceChange.maintenanceStatistics.medianGodClassWithVariables = target.maintenance.maintenanceStatistics.maxGodClassWithVariables - base.maintenance.maintenanceStatistics.maxGodClassWithVariables;
-        maintenanceChange.maintenanceStatistics.medianGodClassWithMethods = target.maintenance.maintenanceStatistics.maxGodClassWithMethods - base.maintenance.maintenanceStatistics.maxGodClassWithMethods;
+        maintenanceChange.maintenanceStatistics.medianGodClassWithVariables = target.maintenance.maintenanceStatistics.medianGodClassWithVariables - base.maintenance.maintenanceStatistics.medianGodClassWithVariables;
+        maintenanceChange.maintenanceStatistics.medianGodClassWithMethods = target.maintenance.maintenanceStatistics.medianGodClassWithMethods - base.maintenance.maintenanceStatistics.medianGodClassWithMethods;
 
         maintenanceChange.maintenanceStatistics.superMethodsCount = target.maintenance.maintenanceStatistics.superMethodsCount - base.maintenance.maintenanceStatistics.superMethodsCount;
         maintenanceChange.maintenanceStatistics.maxSuperMethodWithParameters = target.maintenance.maintenanceStatistics.maxSuperMethodWithParameters - base.maintenance.maintenanceStatistics.maxSuperMethodWithParameters;
         maintenanceChange.maintenanceStatistics.maxSuperMethodWithLines = target.maintenance.maintenanceStatistics.maxSuperMethodWithLines - base.maintenance.maintenanceStatistics.maxSuperMethodWithLines;
-        maintenanceChange.maintenanceStatistics.medianSuperMethodWithParameters = target.maintenance.maintenanceStatistics.maxSuperMethodWithParameters - base.maintenance.maintenanceStatistics.maxSuperMethodWithParameters;
-        maintenanceChange.maintenanceStatistics.medianSuperMethodWithLines = target.maintenance.maintenanceStatistics.maxSuperMethodWithLines - base.maintenance.maintenanceStatistics.maxSuperMethodWithLines;
+        maintenanceChange.maintenanceStatistics.medianSuperMethodWithParameters = target.maintenance.maintenanceStatistics.medianSuperMethodWithParameters - base.maintenance.maintenanceStatistics.medianSuperMethodWithParameters;
+        maintenanceChange.maintenanceStatistics.medianSuperMethodWithLines = target.maintenance.maintenanceStatistics.medianSuperMethodWithLines - base.maintenance.maintenanceStatistics.medianSuperMethodWithLines;
 
         maintenanceChange.maintenanceStatistics.godCommentsCount = target.maintenance.maintenanceStatistics.godCommentsCount - base.maintenance.maintenanceStatistics.godCommentsCount;
         maintenanceChange.maintenanceStatistics.maxGodComment = target.maintenance.maintenanceStatistics.maxGodComment - base.maintenance.maintenanceStatistics.maxGodComment;
-        maintenanceChange.maintenanceStatistics.medianGodComment = target.maintenance.maintenanceStatistics.maxGodComment - base.maintenance.maintenanceStatistics.maxGodComment;
+        maintenanceChange.maintenanceStatistics.medianGodComment = target.maintenance.maintenanceStatistics.medianGodComment - base.maintenance.maintenanceStatistics.medianGodComment;
 
-        maintenanceChange.maintenanceStatistics.superCyclomaticsCount = target.maintenance.maintenanceStatistics.superCyclomaticsCount = base.maintenance.maintenanceStatistics.superCyclomaticsCount;
+        maintenanceChange.maintenanceStatistics.superCyclomaticsCount = target.maintenance.maintenanceStatistics.superCyclomaticsCount - base.maintenance.maintenanceStatistics.superCyclomaticsCount;
         maintenanceChange.maintenanceStatistics.maxCyclomatic = target.maintenance.maintenanceStatistics.maxCyclomatic - base.maintenance.maintenanceStatistics.maxCyclomatic;
-        maintenanceChange.maintenanceStatistics.medianCyclomatic = target.maintenance.maintenanceStatistics.maxCyclomatic - base.maintenance.maintenanceStatistics.maxCyclomatic;
+        maintenanceChange.maintenanceStatistics.medianCyclomatic = target.maintenance.maintenanceStatistics.medianCyclomatic - base.maintenance.maintenanceStatistics.medianCyclomatic;
 
         maintenanceChange.maintenanceStatistics.superDuplicationsCount = target.maintenance.maintenanceStatistics.superDuplicationsCount - base.maintenance.maintenanceStatistics.superDuplicationsCount;
         maintenanceChange.maintenanceStatistics.maxDuplication = target.maintenance.maintenanceStatistics.maxDuplication - base.maintenance.maintenanceStatistics.maxDuplication;
-        maintenanceChange.maintenanceStatistics.medianDuplication = target.maintenance.maintenanceStatistics.maxDuplication - base.maintenance.maintenanceStatistics.maxDuplication;
+        maintenanceChange.maintenanceStatistics.medianDuplication = target.maintenance.maintenanceStatistics.medianDuplication - base.maintenance.maintenanceStatistics.medianDuplication;
 
     }
 
@@ -116,7 +116,7 @@ public class DiffProject {
         this.maintenanceOnlyIncrease.cyclomaticOriginData = diffListOnlyInSecond(base.maintenance.cyclomaticOriginData, target.maintenance.cyclomaticOriginData);
         this.maintenanceOnlyIncrease.duplicationOriginData = diffListOnlyInSecond(base.maintenance.duplicationOriginData, target.maintenance.duplicationOriginData);
         //if sum change
-        this.maintenanceOnlyIncrease.superDuplications = diffSumValue(base.maintenance.superDuplications, target.maintenance.superDuplications);
+        this.maintenanceOnlyIncrease.superDuplications = diffSumValueOnlyIncrease(base.maintenance.superDuplications, target.maintenance.superDuplications);
 
         this.maintenanceOnlyIncrease.godClassWithMethods = diffMapOnlyIncreaseInSecondMap(base.maintenance.godClassWithMethods, target.maintenance.godClassWithMethods);
         this.maintenanceOnlyIncrease.godClassWithVariables = diffMapOnlyIncreaseInSecondMap(base.maintenance.godClassWithVariables, target.maintenance.godClassWithVariables);
@@ -233,7 +233,7 @@ public class DiffProject {
         if (Objects.equals(format, "cmd")) {
             System.out.println(this);
         } else if (Objects.equals(format, "text")) {
-            String pathStr = generateReportPathStr("", "diff--summary", reportDir);
+            String pathStr = generateReportPathStr(name, "diff--summary", reportDir);
 
             PrintWriter printWriter = getPrintWriter(pathStr);
             printWriter.println(this);

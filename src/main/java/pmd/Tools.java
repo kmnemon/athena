@@ -35,12 +35,20 @@ public class Tools {
     }
 
     public static String generateReportPathStr(String codeDir, String rulesets, String reportDir) {
-        String name = codeDir + "---" + rulesets;
+        String name = codeDir;
         name = name.replace("/", "_");
         name = name.replace("\\", "_");
         name = name.replace(":", "");
-        return reportDir + name;
 
+        rulesets = rulesets.replace("/", "_");
+        rulesets = rulesets.replace(".", "_");
+
+        File directory = new File(reportDir + name );
+        if( !directory.exists()) {
+            directory.mkdirs();
+        }
+
+        return reportDir  + "/" +  name + "/" + rulesets;
     }
 
     public static List<String> generatePmdOutput(String codeDir, String ruleset, String reportDir) {
