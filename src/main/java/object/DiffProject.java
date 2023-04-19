@@ -148,50 +148,40 @@ public class DiffProject {
             return new ArrayList<>();
         }
 
-        base = getRidOfLineNumberFromList(base);
-        target = getRidOfLineNumberFromList(target);
-
         List<String> diff = new ArrayList<>(target);
-        diff.removeAll(base);
+        for(String ds : diff){
+            for(String bs : base){
+                if( getRidOfLineNumber(ds).equals(getRidOfLineNumber(bs))){
+                    diff.remove(ds);
+                    break;
+                }
+            }
+        }
+
         return diff;
     }
 
-    public static List<String> getRidOfLineNumberFromList(List<String> l){
-        return l.stream().map(DiffProject::getRidOfLineNumber).collect(Collectors.toList());
-    }
 
-    private static Map<String, Integer> diffMapOnlyIncreaseInSecondMap(Map<String, Integer> base, Map<String, Integer> target) {
+    public static Map<String, Integer> diffMapOnlyIncreaseInSecondMap(Map<String, Integer> base, Map<String, Integer> target) {
         if(target == null){
             return new HashMap<>();
         }
 
-        base  = getRidOfLineNumberFromMap(base);
-        target = getRidOfLineNumberFromMap(target);
-
-        Map<String, Integer> diffMap = new HashMap<>();
-        for (Map.Entry<String, Integer> entry : target.entrySet()) {
-            if (base.containsKey(entry.getKey())) {
-                Integer baseValue = base.get(entry.getKey());
-                if (entry.getValue() > baseValue) {
-                    diffMap.put(entry.getKey(), entry.getValue() - baseValue);
+        Map<String, Integer> diffMap = new HashMap<>(target);
+        for (Iterator<Map.Entry<String, Integer>> it = diffMap.entrySet().iterator(); it.hasNext();) {
+            Map.Entry<String, Integer> entryDiff = it.next();
+            for(Map.Entry<String, Integer> entryBase : base.entrySet()){
+                if(getRidOfLineNumber(entryBase.getKey()).equals(getRidOfLineNumber(entryDiff.getKey()))){
+                    if(entryDiff.getValue() > entryBase.getValue()){
+                        diffMap.put(entryDiff.getKey(), entryDiff.getValue() - entryBase.getValue());
+                    }else {
+                        it.remove();
+                    }
                 }
-            } else {
-                diffMap.put(entry.getKey(), entry.getValue());
             }
         }
 
         return diffMap;
-    }
-
-    public static Map<String, Integer> getRidOfLineNumberFromMap(Map<String, Integer> m){
-        Map<String, Integer> newMap = new HashMap<>();
-
-        for (String key : m.keySet()) {
-            String reducedKey = getRidOfLineNumber(key);
-            newMap.put(reducedKey, m.get(key));
-        }
-
-        return newMap;
     }
 
 
