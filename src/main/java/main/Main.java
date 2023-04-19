@@ -3,27 +3,33 @@ package main;
 
 import object.DiffProject;
 import object.Project;
+import org.yaml.snakeyaml.Yaml;
 
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 
 public class Main {
-    static Map<String, String> projectDirs = new HashMap<>();
 
     public static void main(String[] args) {
-        String reportDir = "/Users/ke/tmp";
-        projectDirs.put("./src/test/java/testdata/", "");
+        InputStream inputStream = Main.class.getClassLoader().getResourceAsStream("application.yml");
+        Yaml yaml = new Yaml();
+        Map<String, Object> data = yaml.load(inputStream);
 
-        for(Map.Entry<String, String> pdir : projectDirs.entrySet()) {
-            createOrCleanReportDir(pdir.getKey(), reportDir);
-            createOrCleanReportDir(pdir.getValue(), reportDir);
+        List<Map<String, String>> projectList = (List<Map<String, String>>) data.get("project");
 
-            System.out.println("~~~~target begin~~~~");
-            Project target = new Project(pdir.getKey(), reportDir);
+        String reportDir = (String) data.get("log.uri");
+
+        for (Map<String, String> project : projectList) {
+            createOrCleanReportDir(project.get("base"), reportDir);
+            createOrCleanReportDir(project.get("target"), reportDir);
+
+            System.out.printf("~~~~target begin~~~~: %s\n", project.get("target"));
+            Project target = new Project(project.get("target"), reportDir);
             target.parseMaintenanceDebt();
             target.printMaintenanceStatistics("text");
 
@@ -36,8 +42,8 @@ public class Main {
 
             System.out.println();//-------------------------//
 
-            System.out.println("~~~~base begin~~~~");
-            Project base = new Project(pdir.getValue(), reportDir);
+            System.out.printf("~~~~base begin~~~~: %s", project.get("base"));
+            Project base = new Project(project.get("base"), reportDir);
             base.parseMaintenanceDebt();
             base.printMaintenanceStatistics("text");
 
@@ -51,7 +57,7 @@ public class Main {
             System.out.println();//-------------------------//
 
             System.out.println("~~~~diff begin~~~~");
-            DiffProject dp = new DiffProject(pdir.getValue(), base, target, reportDir);
+            DiffProject dp = new DiffProject(project.get("target"), base, target, reportDir);
             dp.diffTechDebtObject();
             dp.printDiffProject("text");
 
@@ -84,4 +90,7 @@ public class Main {
         }
     }
 
+
+
 }
+

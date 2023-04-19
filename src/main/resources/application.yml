@@ -1,0 +1,7 @@
+project:
+    - base: "D:\\sdf"
+      target: "D:\\sdf"
+    - base: "sdf"
+      target: "sdf"
+
+log.uri: "/Users/ke/tmp"

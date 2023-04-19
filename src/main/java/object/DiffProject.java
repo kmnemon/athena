@@ -209,6 +209,25 @@ public class DiffProject {
     //diffPrint contain only changes
     private void diffMaintenanceStatistics() {
         this.maintenanceOnlyIncrease.generateMaintenanceStatistics();
+        this.maintenanceOnlyIncrease.maintenanceStatistics.maxGodClassWithVariables = 0;
+        this.maintenanceOnlyIncrease.maintenanceStatistics.maxGodClassWithMethods = 0;
+        this.maintenanceOnlyIncrease.maintenanceStatistics.medianGodClassWithVariables = 0;
+        this.maintenanceOnlyIncrease.maintenanceStatistics.medianGodClassWithMethods = 0;
+
+        this.maintenanceOnlyIncrease.maintenanceStatistics.maxSuperMethodWithParameters = 0;
+        this.maintenanceOnlyIncrease.maintenanceStatistics.maxSuperMethodWithLines = 0;
+        this.maintenanceOnlyIncrease.maintenanceStatistics.medianSuperMethodWithParameters = 0;
+        this.maintenanceOnlyIncrease.maintenanceStatistics.medianSuperMethodWithLines = 0;
+
+        this.maintenanceOnlyIncrease.maintenanceStatistics.maxGodComment = 0;
+        this.maintenanceOnlyIncrease.maintenanceStatistics.medianGodComment = 0;
+
+        this.maintenanceOnlyIncrease.maintenanceStatistics.maxCyclomatic = 0;
+        this.maintenanceOnlyIncrease.maintenanceStatistics.medianCyclomatic = 0;
+
+        this.maintenanceOnlyIncrease.maintenanceStatistics.superDuplicationsCount = this.maintenanceOnlyIncrease.superDuplications.get(0);
+        this.maintenanceOnlyIncrease.maintenanceStatistics.maxDuplication = 0;
+        this.maintenanceOnlyIncrease.maintenanceStatistics.medianDuplication = 0;
     }
 
     private void diffRegulationStatistics() {

@@ -14,8 +14,8 @@ public enum Rulesets {
     FLOWCONTROL("rulesets/java/ali-flowcontrol.xml"),
     NAMING("rulesets/java/ali-naming.xml"),
     OOP("rulesets/java/ali-oop.xml"),
-    OTHER("rulesets/java/ali-other.xml"),
-    SET("rulesets/java/ali-set.xml");
+    SET("rulesets/java/ali-set.xml"),
+    OTHER("rulesets/java/ali-other.xml");
 
 
 
