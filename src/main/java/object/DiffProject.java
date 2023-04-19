@@ -149,10 +149,11 @@ public class DiffProject {
         }
 
         List<String> diff = new ArrayList<>(target);
-        for(String ds : diff){
+        for(Iterator<String> di = diff.iterator(); di.hasNext();){
+            String ds = di.next();
             for(String bs : base){
                 if( getRidOfLineNumber(ds).equals(getRidOfLineNumber(bs))){
-                    diff.remove(ds);
+                    di.remove();
                     break;
                 }
             }
