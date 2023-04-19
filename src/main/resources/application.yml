@@ -1,7 +1,6 @@
 project:
-    - base: "D:\\sdf"
-      target: "D:\\sdf"
-    - base: "sdf"
-      target: "sdf"
+    - base: "/Users/ke/java/athena"
+      target: "/Users/ke/java/athena"
+
 
 log.uri: "/Users/ke/tmp"

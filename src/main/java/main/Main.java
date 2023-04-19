@@ -25,8 +25,8 @@ public class Main {
         String reportDir = (String) data.get("log.uri");
 
         for (Map<String, String> project : projectList) {
-            createOrCleanReportDir(project.get("base"), reportDir);
-            createOrCleanReportDir(project.get("target"), reportDir);
+            reportDir = createOrCleanReportDir(project.get("base"), reportDir);
+            reportDir = createOrCleanReportDir(project.get("target"), reportDir);
 
             System.out.printf("~~~~target begin~~~~: %s\n", project.get("target"));
             Project target = new Project(project.get("target"), reportDir);
@@ -67,9 +67,12 @@ public class Main {
 
     }
 
-    private static void createOrCleanReportDir(String codeDir, String reportDir) {
+    private static String createOrCleanReportDir(String codeDir, String reportDir) {
+        if(!reportDir.endsWith("/")){
+            reportDir = reportDir + "/";
+        }
+
         codeDir = codeDir.replace("/", "_");
-        codeDir = codeDir.replace("\\", "_");
         codeDir = codeDir.replace(":", "");
 
         File directory = new File(reportDir + codeDir);
@@ -77,6 +80,7 @@ public class Main {
             deleteDirectory(reportDir + codeDir);
         }
 
+        return reportDir;
     }
 
     public static void deleteDirectory(String dir) {
