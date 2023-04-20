@@ -1,6 +1,6 @@
 project:
-    - base: "/Users/ke/java/athena"
-      target: "/Users/ke/java/athena"
+    - base:
+      target: "/Users/ke/java/athena/src/test/java/testdata"
 
 
-report.uri: "/Users/ke/tmp"
+report.uri: "/Users/ke/tmp/report"

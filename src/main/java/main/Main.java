@@ -76,7 +76,7 @@ public class Main {
 
     }
 
-    private static String createOrCleanReportDir(String codeDir, String reportDir) {
+    public static String createOrCleanReportDir(String codeDir, String reportDir) {
         if(!reportDir.endsWith("/")){
             reportDir = reportDir + "/";
         }

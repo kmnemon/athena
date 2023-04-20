@@ -172,6 +172,16 @@ public class Maintenance {
         String mname = splitMethodName(line);
 
         String tmname;
+
+        if (!p.packages.get(packName).classes.get(cname).methods.containsKey(mname)) {
+            for( var cs : p.packages.get(packName).classes.entrySet()){
+                if( cs.getValue().methods.containsKey(mname)){
+                    cname = cs.getValue().name;
+                    break;
+                }
+            }
+        }
+
         if( p.packages.get(packName).classes.get(cname).methods.get(mname).cyclomatic == 0){
             tmname = mname;
         }else{

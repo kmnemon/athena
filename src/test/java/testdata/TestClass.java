@@ -21,6 +21,12 @@ public class TestClass {
         public int ttx;
     }
 
+    private class PrivateClassA{
+        private void privateClassMethodAX(){
+
+        }
+    }
+
 }
 
 class X{}
