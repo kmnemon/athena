@@ -3,4 +3,4 @@ project:
       target: "/Users/ke/java/athena"
 
 
-log.uri: "/Users/ke/tmp"
+report.uri: "/Users/ke/tmp"

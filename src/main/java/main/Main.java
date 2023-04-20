@@ -22,46 +22,55 @@ public class Main {
 
         List<Map<String, String>> projectList = (List<Map<String, String>>) data.get("project");
 
-        String reportDir = (String) data.get("log.uri");
+        String reportDir = (String) data.get("report.uri");
 
         for (Map<String, String> project : projectList) {
-            reportDir = createOrCleanReportDir(project.get("base"), reportDir);
-            reportDir = createOrCleanReportDir(project.get("target"), reportDir);
+            Project target = null;
+            String targetDir = project.get("target");
+            if(targetDir != null && !targetDir.isEmpty()) {
+                reportDir = createOrCleanReportDir(targetDir, reportDir);
+                System.out.printf("~~~~target begin~~~~: %s\n", targetDir);
+                target = new Project(project.get("target"), reportDir);
+                target.parseMaintenanceDebt();
+                target.printMaintenanceStatistics("text");
 
-            System.out.printf("~~~~target begin~~~~: %s\n", project.get("target"));
-            Project target = new Project(project.get("target"), reportDir);
-            target.parseMaintenanceDebt();
-            target.printMaintenanceStatistics("text");
+                target.parseRegulationDebt();
+                target.printRegulationStatistics("text");
 
-            target.parseRegulationDebt();
-            target.printRegulationStatistics("text");
+                target.parseDesignDebt();
+                target.printDesignStatistics("text");
+                System.out.println("~~~~target finish~~~~");
+            }
 
-            target.parseDesignDebt();
-            target.printDesignStatistics("text");
-            System.out.println("~~~~target finish~~~~");
+            System.out.println();//-------------------------//
+            Project base = null;
+            String baseDir = project.get("base");
+            if( baseDir != null && !baseDir.isEmpty()) {
+                System.out.printf("~~~~base begin~~~~: %s\n", baseDir);
+                createOrCleanReportDir(baseDir, reportDir);
+
+                base = new Project(project.get("base"), reportDir);
+                base.parseMaintenanceDebt();
+                base.printMaintenanceStatistics("text");
+
+                base.parseRegulationDebt();
+                base.printRegulationStatistics("text");
+
+                base.parseDesignDebt();
+                base.printDesignStatistics("text");
+                System.out.println("~~~~base finish~~~~");
+            }
 
             System.out.println();//-------------------------//
 
-            System.out.printf("~~~~base begin~~~~: %s", project.get("base"));
-            Project base = new Project(project.get("base"), reportDir);
-            base.parseMaintenanceDebt();
-            base.printMaintenanceStatistics("text");
+            if( target != null && base != null) {
+                System.out.println("~~~~diff begin~~~~");
+                DiffProject dp = new DiffProject(project.get("target"), base, target, reportDir);
+                dp.diffTechDebtObject();
+                dp.printDiffProject("text");
 
-            base.parseRegulationDebt();
-            base.printRegulationStatistics("text");
-
-            base.parseDesignDebt();
-            base.printDesignStatistics("text");
-            System.out.println("~~~~base finish~~~~");
-
-            System.out.println();//-------------------------//
-
-            System.out.println("~~~~diff begin~~~~");
-            DiffProject dp = new DiffProject(project.get("target"), base, target, reportDir);
-            dp.diffTechDebtObject();
-            dp.printDiffProject("text");
-
-            System.out.println("~~~~diff finish~~~~");
+                System.out.println("~~~~diff finish~~~~");
+            }
 
         }
 
