@@ -22,65 +22,58 @@ public class Main {
 
         List<Map<String, String>> projectList = (List<Map<String, String>>) data.get("project");
 
-        String reportDir = (String) data.get("report.uri");
+        String reportDir = handleReportDir((String) data.get("report.uri"));
 
         for (Map<String, String> project : projectList) {
             Project target = null;
-            String targetDir = project.get("target");
-            if(targetDir != null && !targetDir.isEmpty()) {
-                reportDir = createOrCleanReportDir(targetDir, reportDir);
-                System.out.printf("~~~~target begin~~~~: %s\n", targetDir);
-                target = new Project(project.get("target"), reportDir);
-                target.parseMaintenanceDebt();
-                target.printMaintenanceStatistics("text");
+            target = parseProject(project, target, "target", reportDir);
 
-                target.parseRegulationDebt();
-                target.printRegulationStatistics("text");
-
-                target.parseDesignDebt();
-                target.printDesignStatistics("text");
-                System.out.println("~~~~target finish~~~~");
-            }
-
-            System.out.println();//-------------------------//
             Project base = null;
-            String baseDir = project.get("base");
-            if( baseDir != null && !baseDir.isEmpty()) {
-                System.out.printf("~~~~base begin~~~~: %s\n", baseDir);
-                reportDir = createOrCleanReportDir(baseDir, reportDir);
+            base = parseProject(project, base, "base", reportDir);
 
-                base = new Project(project.get("base"), reportDir);
-                base.parseMaintenanceDebt();
-                base.printMaintenanceStatistics("text");
-
-                base.parseRegulationDebt();
-                base.printRegulationStatistics("text");
-
-                base.parseDesignDebt();
-                base.printDesignStatistics("text");
-                System.out.println("~~~~base finish~~~~");
-            }
-
-            System.out.println();//-------------------------//
-
-            if( target != null && base != null) {
-                System.out.println("~~~~diff begin~~~~");
-                DiffProject dp = new DiffProject(project.get("target"), base, target, reportDir);
-                dp.diffTechDebtObject();
-                dp.printDiffProject("text");
-
-                System.out.println("~~~~diff finish~~~~");
-            }
-
+            diffProject(project, target, base, reportDir);
         }
-
     }
 
-    public static String createOrCleanReportDir(String codeDir, String reportDir) {
+    private static void diffProject(Map<String, String> project, Project target, Project base, String reportDir) {
+        if( target != null && base != null) {
+            System.out.println("~~~~diff begin~~~~");
+            DiffProject dp = new DiffProject(project.get("target"), base, target, reportDir);
+            dp.diffTechDebtObject();
+            dp.printDiffProject("text");
+
+            System.out.println("~~~~diff finish~~~~");
+        }
+    }
+
+    public static String handleReportDir(String reportDir) {
         if(!reportDir.endsWith("/")){
             reportDir = reportDir + "/";
         }
+        return reportDir;
+    }
 
+    private static Project parseProject(Map<String, String> projects, Project p, String flag, String reportDir) {
+        String pDir = projects.get(flag);
+        if(pDir != null && !pDir.isEmpty()) {
+            createOrCleanReportDir(pDir, reportDir);
+            System.out.printf("~~~~%s begin~~~~: %s\n", flag, pDir);
+            p = new Project(projects.get("target"), reportDir);
+            p.parseMaintenanceDebt();
+            p.printMaintenanceStatistics("text");
+
+            p.parseRegulationDebt();
+            p.printRegulationStatistics("text");
+
+            p.parseDesignDebt();
+            p.printDesignStatistics("text");
+            System.out.printf("~~~~%s finish~~~~\n", flag);
+            System.out.println();//-------------------------//
+        }
+        return p;
+    }
+
+    public static void createOrCleanReportDir(String codeDir, String reportDir) {
         codeDir = codeDir.replace("/", "_");
         codeDir = codeDir.replace(":", "");
 
@@ -88,8 +81,6 @@ public class Main {
         if(directory.exists()){
             deleteDirectory(reportDir + codeDir);
         }
-
-        return reportDir;
     }
 
     public static void deleteDirectory(String dir) {

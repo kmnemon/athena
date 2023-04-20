@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.nio.file.Paths;
 
 import static main.Main.createOrCleanReportDir;
+import static main.Main.handleReportDir;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AstTest {
@@ -15,8 +16,9 @@ public class AstTest {
     @BeforeEach
     public void setUp(){
         String codeDir = "/Users/ke/java/athena/src/test/java/testdata";
-        String reportDir = "/Users/ke/tmp/report";
-        reportDir = createOrCleanReportDir(codeDir, reportDir);
+        String reportDir = "/Users/ke/tmp/report/";
+        handleReportDir(reportDir);
+        createOrCleanReportDir(codeDir, reportDir);
 
         p = new Project(codeDir, reportDir);
         Ast.generateObjectsWithAst(codeDir, p);
