@@ -173,6 +173,14 @@ public class Maintenance {
 
         String tmname;
 
+        cname = findPrivateClassWithMethodName(packName, cname, mname);
+
+        tmname = handleMethodOverloadSignature(packName, cname, mname);
+
+        p.packages.get(packName).classes.get(cname).methods.get(tmname).cyclomatic = splitCyclomatic(line);
+    }
+    
+    private String findPrivateClassWithMethodName(String packName, String cname, String mname) {
         if (!p.packages.get(packName).classes.get(cname).methods.containsKey(mname)) {
             for( var cs : p.packages.get(packName).classes.entrySet()){
                 if( cs.getValue().methods.containsKey(mname)){
@@ -181,18 +189,21 @@ public class Maintenance {
                 }
             }
         }
+        return cname;
+    }
 
+    private String handleMethodOverloadSignature(String packName, String cname, String mname) {
+        String tmname;
         if( p.packages.get(packName).classes.get(cname).methods.get(mname).cyclomatic == 0){
             tmname = mname;
         }else{
             int i = 2;
-            while (p.packages.get(packName).classes.get(cname).methods.get(mname+ "@" + i).cyclomatic != 0){
+            while (p.packages.get(packName).classes.get(cname).methods.get(mname + "@" + i).cyclomatic != 0){
                 i++;
             }
             tmname = mname + "@" + i;
         }
-
-        p.packages.get(packName).classes.get(cname).methods.get(tmname).cyclomatic = splitCyclomatic(line);
+        return tmname;
     }
 
     private static String splitPackageName(String line){
