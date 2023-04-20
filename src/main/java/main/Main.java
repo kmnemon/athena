@@ -47,7 +47,7 @@ public class Main {
             String baseDir = project.get("base");
             if( baseDir != null && !baseDir.isEmpty()) {
                 System.out.printf("~~~~base begin~~~~: %s\n", baseDir);
-                createOrCleanReportDir(baseDir, reportDir);
+                reportDir = createOrCleanReportDir(baseDir, reportDir);
 
                 base = new Project(project.get("base"), reportDir);
                 base.parseMaintenanceDebt();
