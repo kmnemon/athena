@@ -58,7 +58,7 @@ public class Main {
         if(pDir != null && !pDir.isEmpty()) {
             createOrCleanReportDir(pDir, reportDir);
             System.out.printf("~~~~%s begin~~~~: %s\n", flag, pDir);
-            p = new Project(projects.get("target"), reportDir);
+            p = new Project(projects.get(flag), reportDir);
             p.parseMaintenanceDebt();
             p.printMaintenanceStatistics("text");
 
