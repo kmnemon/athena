@@ -31,7 +31,7 @@ public class AstTest {
 
     @Test
     public void testAstToClasses(){
-        assertEquals(3, ast.p.packages.get("testdata").classes.size());
+        assertEquals(6, ast.p.packages.get("testdata").classes.size());
         assertEquals("TestClass", ast.p.packages.get("testdata").classes.get("TestClass").name);
         assertEquals("TT", ast.p.packages.get("testdata").classes.get("TT").name);
 

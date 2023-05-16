@@ -1,7 +1,9 @@
 package main;
 
 
+import object.ChangeProject;
 import object.DiffProject;
+import object.LimitProject;
 import object.Project;
 import org.yaml.snakeyaml.Yaml;
 
@@ -38,9 +40,13 @@ public class Main {
     private static void diffProject(Map<String, String> project, Project target, Project base, String reportDir) {
         if( target != null && base != null) {
             System.out.println("~~~~diff begin~~~~");
-            DiffProject dp = new DiffProject(project.get("target"), base, target, reportDir);
-            dp.diffTechDebtObject();
-            dp.printDiffProject("text");
+//            ChangeProject cp = new ChangeProject(project.get("target"), base, target, reportDir);
+//            cp.diffTechDebtObjectChange();
+//            cp.printDiffProject("text");
+
+            LimitProject lp = new LimitProject(project.get("target"), base, target, reportDir);
+            lp.diffTechDebtObjectLimit();
+            lp.printDiffProject("text");
 
             System.out.println("~~~~diff finish~~~~");
         }

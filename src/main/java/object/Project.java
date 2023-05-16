@@ -13,7 +13,7 @@ import java.util.Objects;
 
 import static pmd.Tools.generateReportPathStr;
 
-public class Project {
+public class Project implements P{
     public String name;
     public Map<String, Package> packages;
 
@@ -98,4 +98,20 @@ public class Project {
         return printWriter;
     }
 
+
+    public String getName() {
+        return name;
+    }
+
+    public Maintenance getMaintenance() {
+        return maintenance;
+    }
+
+    public Regulation getRegulation() {
+        return regulation;
+    }
+
+    public Design getDesign() {
+        return design;
+    }
 }

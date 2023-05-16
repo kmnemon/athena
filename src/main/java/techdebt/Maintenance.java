@@ -26,6 +26,7 @@ public class Maintenance {
     //class level
     public Map<String, Integer> godClassWithMethods;
     public Map<String, Integer> godClassWithVariables;
+    //class name and comments line count
     public Map<String, Integer> godComments;
 
     //method level
