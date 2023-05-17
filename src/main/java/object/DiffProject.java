@@ -1,11 +1,12 @@
 package object;
 
 import com.google.gson.GsonBuilder;
-import techdebt.*;
+import techdebt.Design;
+import techdebt.Maintenance;
+import techdebt.Regulation;
 
 import java.io.PrintWriter;
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
 
 import static object.Project.getPrintWriter;
@@ -70,7 +71,7 @@ public class DiffProject implements P{
         return diff;
     }
 
-    public static Map<String, Integer> diffMapOnlyIncreaseInSecondMap(Map<String, Integer> base, Map<String, Integer> target) {
+    public static<T> Map<T, Integer> diffMapOnlyIncreaseInSecondMap(Map<T, Integer> base, Map<T, Integer> target) {
         return diffMapWithComsumer(base, target, null);
     }
 
@@ -78,25 +79,26 @@ public class DiffProject implements P{
         return diffMapWithComsumer(base, target, DiffProject::getRidOfLineNumber);
     }
 
-    private static Map<String,Integer> diffMapWithComsumer(Map<String, Integer> base, Map<String, Integer> target, UnaryOperator<String> uop){
+    private static<T> Map<T,Integer> diffMapWithComsumer(Map<T, Integer> base, Map<T, Integer> target, UnaryOperator<T> uop){
         if(target == null){
             return new HashMap<>();
         }
 
         if( uop == null){
-            uop = (str) -> {return str;};
+            uop = (v) -> {return v;};
         }
 
-        Map<String, Integer> diffMap = new HashMap<>(target);
-        for (Iterator<Map.Entry<String, Integer>> it = diffMap.entrySet().iterator(); it.hasNext();) {
-            Map.Entry<String, Integer> entryDiff = it.next();
-            for(Map.Entry<String, Integer> entryBase : base.entrySet()){
+        Map<T, Integer> diffMap = new HashMap<>(target);
+        for (Iterator<Map.Entry<T, Integer>> it = diffMap.entrySet().iterator(); it.hasNext();) {
+            Map.Entry<T, Integer> entryDiff = it.next();
+            for(Map.Entry<T, Integer> entryBase : base.entrySet()){
                 if(uop.apply(entryBase.getKey()).equals(uop.apply(entryDiff.getKey()))){
                     if(entryDiff.getValue() > entryBase.getValue()){
                         diffMap.put(entryDiff.getKey(), entryDiff.getValue() - entryBase.getValue());
                     }else {
                         it.remove();
                     }
+                    break;
                 }
             }
         }
@@ -108,11 +110,11 @@ public class DiffProject implements P{
         return str.replaceAll(":\\d+:", "");
     }
 
-    public void printDiffProject(String format) {
+    public void printDiffProject(String format, String type) {
         if (Objects.equals(format, "cmd")) {
             System.out.println(this);
         } else if (Objects.equals(format, "text")) {
-            String pathStr = generateReportPathStr(name, "diff--summary", reportDir);
+            String pathStr = generateReportPathStr(name, type, reportDir);
 
             PrintWriter printWriter = getPrintWriter(pathStr);
             printWriter.println(this);

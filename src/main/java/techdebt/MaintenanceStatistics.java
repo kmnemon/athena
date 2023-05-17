@@ -1,7 +1,6 @@
 package techdebt;
 
 
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
@@ -138,14 +137,15 @@ public class MaintenanceStatistics {
 
     void setMaxDuplication(Maintenance m) {
         if(!m.superDuplications.isEmpty()) {
-            this.maxDuplication = Collections.max(m.superDuplications);
+            this.maxDuplication = Collections.max(new ArrayList<>(m.superDuplications.values()));
         }
     }
 
     void setMedianDuplication(Maintenance m){
         if(!m.superDuplications.isEmpty()) {
-            Collections.sort(m.superDuplications);
-            this.medianDuplication = m.superDuplications.get(m.superDuplications.size()/2);
+            List<Integer> l = new ArrayList<>(m.superDuplications.values());
+            Collections.sort(l);
+            this.medianDuplication = l.get(l.size()/2);
         }
     }
 

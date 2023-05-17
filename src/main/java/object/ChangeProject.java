@@ -2,16 +2,26 @@ package object;
 
 import com.google.gson.GsonBuilder;
 
+import java.util.Map;
+
 public class ChangeProject extends DiffProject{
 
     public ChangeProject(String name, Project base, Project target, String reportDir) {
         super(name, base, target, reportDir);
     }
 
-    public void diffTechDebtObjectChange(){
-        this.diffMaintenanceStatisticsChange();
-        this.diffRegulationStatisticsChange();
-        this.diffDesignStatisticsChange();
+    public void diffTechDebtObjectChange(Map<String, Boolean> rules){
+        if(rules.get("maintenance")) {
+            this.diffMaintenanceStatisticsChange();
+        }
+
+        if(rules.get("regulation")) {
+            this.diffRegulationStatisticsChange();
+        }
+
+        if(rules.get("design")) {
+            this.diffDesignStatisticsChange();
+        }
     }
 
     @Override

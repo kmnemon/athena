@@ -3,20 +3,28 @@ package object;
 import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class LimitProject extends DiffProject{
     public LimitProject(String name, Project base, Project target, String reportDir) {
         super(name, base, target, reportDir);
     }
 
-    public void diffTechDebtObjectLimit() {
-        this.diffMaintenanceLimit();
-        this.diffRegulationLimit();
-        this.diffDesignLimit();
+    public void diffTechDebtObjectLimit(Map<String, Boolean> rules) {
+        if(rules.get("maintenance")) {
+            this.diffMaintenanceLimit();
+            this.diffMaintenanceStatistics();
+        }
 
-        this.diffMaintenanceStatistics();
-        this.diffRegulationStatistics();
-        this.diffDesignStatistics();
+        if(rules.get("regulation")) {
+            this.diffRegulationLimit();
+            this.diffRegulationStatistics();
+        }
+
+        if(rules.get("design")) {
+            this.diffDesignLimit();
+            this.diffDesignStatistics();
+        }
     }
 
     @Override
@@ -27,15 +35,18 @@ public class LimitProject extends DiffProject{
     //Maintenance, regulation, design only increase data
     private void diffMaintenanceLimit() {
         this.maintenance.cyclomaticOriginData = diffListOnlyInSecondAndFilterLineNumber(base.maintenance.cyclomaticOriginData, target.maintenance.cyclomaticOriginData);
-
-        this.maintenance.superDuplications = new ArrayList<>();
+        this.maintenance.duplicationOriginData = new ArrayList<>();
 
         this.maintenance.godClassWithMethods = diffMapOnlyIncreaseInSecondMap(base.maintenance.godClassWithMethods, target.maintenance.godClassWithMethods);
         this.maintenance.godClassWithVariables = diffMapOnlyIncreaseInSecondMap(base.maintenance.godClassWithVariables, target.maintenance.godClassWithVariables);
         this.maintenance.godComments = diffMapOnlyIncreaseInSecondMap(base.maintenance.godComments, target.maintenance.godComments);
+
         this.maintenance.superMethodWithParameters = diffMapOnlyIncreaseInSecondMap(base.maintenance.superMethodWithParameters, target.maintenance.superMethodWithParameters);
         this.maintenance.superMethodWithLines = diffMapOnlyIncreaseInSecondMap(base.maintenance.superMethodWithLines, target.maintenance.superMethodWithLines);
         this.maintenance.superCyclomatics = diffMapOnlyIncreaseInSecondMap(base.maintenance.superCyclomatics, target.maintenance.superCyclomatics);
+
+        this.maintenance.superDuplications = diffMapOnlyIncreaseInSecondMap(base.maintenance.superDuplications, target.maintenance.superDuplications);
+
     }
 
     private void diffRegulationLimit() {
@@ -74,7 +85,6 @@ public class LimitProject extends DiffProject{
         this.maintenance.maintenanceStatistics.maxCyclomatic = -999;
         this.maintenance.maintenanceStatistics.medianCyclomatic = -999;
 
-        this.maintenance.maintenanceStatistics.superDuplicationsCount = target.maintenance.maintenanceStatistics.superDuplicationsCount - base.maintenance.maintenanceStatistics.superDuplicationsCount;
         this.maintenance.maintenanceStatistics.maxDuplication = -999;
         this.maintenance.maintenanceStatistics.medianDuplication = -999;
     }

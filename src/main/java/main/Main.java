@@ -2,18 +2,18 @@ package main;
 
 
 import object.ChangeProject;
-import object.DiffProject;
 import object.LimitProject;
 import object.Project;
 import org.yaml.snakeyaml.Yaml;
-
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
 
 public class Main {
 
@@ -23,30 +23,30 @@ public class Main {
         Map<String, Object> data = yaml.load(inputStream);
 
         List<Map<String, String>> projectList = (List<Map<String, String>>) data.get("project");
-
         String reportDir = handleReportDir((String) data.get("report.uri"));
+        Map<String, Boolean> rules = (Map<String, Boolean>) data.get("scan.rules");
 
         for (Map<String, String> project : projectList) {
             Project target = null;
-            target = parseProject(project, target, "target", reportDir);
+            target = parseProject(project, target, "target", reportDir, rules);
 
             Project base = null;
-            base = parseProject(project, base, "base", reportDir);
+            base = parseProject(project, base, "base", reportDir, rules);
 
-            diffProject(project, target, base, reportDir);
+            diffProject(project, target, base, reportDir, rules);
         }
     }
 
-    private static void diffProject(Map<String, String> project, Project target, Project base, String reportDir) {
+    private static void diffProject(Map<String, String> project, Project target, Project base, String reportDir, Map<String, Boolean> rules) {
         if( target != null && base != null) {
             System.out.println("~~~~diff begin~~~~");
-//            ChangeProject cp = new ChangeProject(project.get("target"), base, target, reportDir);
-//            cp.diffTechDebtObjectChange();
-//            cp.printDiffProject("text");
+            ChangeProject cp = new ChangeProject(project.get("target") +"-" + project.get("base"), base, target, reportDir);
+            cp.diffTechDebtObjectChange(rules);
+            cp.printDiffProject("text", "diff--change--summary");
 
-            LimitProject lp = new LimitProject(project.get("target"), base, target, reportDir);
-            lp.diffTechDebtObjectLimit();
-            lp.printDiffProject("text");
+            LimitProject lp = new LimitProject(project.get("target") +"-" + project.get("base"), base, target, reportDir);
+            lp.diffTechDebtObjectLimit(rules);
+            lp.printDiffProject("text", "diff--limit--summary");
 
             System.out.println("~~~~diff finish~~~~");
         }
@@ -59,20 +59,27 @@ public class Main {
         return reportDir;
     }
 
-    private static Project parseProject(Map<String, String> projects, Project p, String flag, String reportDir) {
+    private static Project parseProject(Map<String, String> projects, Project p, String flag, String reportDir, Map<String, Boolean> rules) {
         String pDir = projects.get(flag);
         if(pDir != null && !pDir.isEmpty()) {
             createOrCleanReportDir(pDir, reportDir);
             System.out.printf("~~~~%s begin~~~~: %s\n", flag, pDir);
             p = new Project(projects.get(flag), reportDir);
-            p.parseMaintenanceDebt();
-            p.printMaintenanceStatistics("text");
 
-            p.parseRegulationDebt();
-            p.printRegulationStatistics("text");
+            if( rules.get("maintenance")) {
+                p.parseMaintenanceDebt();
+                p.printMaintenanceStatistics("text");
+            }
 
-            p.parseDesignDebt();
-            p.printDesignStatistics("text");
+            if(rules.get("regulation")) {
+                p.parseRegulationDebt();
+                p.printRegulationStatistics("text");
+            }
+
+            if(rules.get("design")) {
+                p.parseDesignDebt();
+                p.printDesignStatistics("text");
+            }
             System.out.printf("~~~~%s finish~~~~\n", flag);
             System.out.println();//-------------------------//
         }

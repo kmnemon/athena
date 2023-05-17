@@ -4,3 +4,9 @@ project:
 
 
 report.uri: "/Users/ke/tmp/report"
+
+
+scan.rules:
+    maintenance: true
+    regulation: true
+    design : false

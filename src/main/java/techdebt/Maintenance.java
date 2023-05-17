@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import pmd.Rulesets;
 import pmd.Tools;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +33,7 @@ public class Maintenance {
     public Map<String, Integer> superMethodWithLines;
     public Map<String, Integer> superCyclomatics;
 
-    public List<Integer> superDuplications;
+    public Map<Duplication, Integer> superDuplications;
 
 
     private static final Logger log = LoggerFactory.getLogger(Maintenance.class);
@@ -53,7 +52,7 @@ public class Maintenance {
         this.superMethodWithParameters = new HashMap<>();
         this.superMethodWithLines = new HashMap<>();
         this.superCyclomatics = new HashMap<>();
-        this.superDuplications = new ArrayList<>();
+        this.superDuplications = new HashMap<>();
     }
 
     @Override
@@ -240,23 +239,34 @@ public class Maintenance {
         return Integer.parseInt(line.substring(index+1, endIndex));
     }
 
-
-
     private void parseDuplication(){
-        duplicationOriginData.stream()
-                .filter(this::filterDuplicationOutput)
-                .forEach(this::addDuplicationOutput);
+        Map<Duplication, Integer> allDuplications = getAllDuplications();
+        parseSuperDuplication(allDuplications);
     }
 
-    private boolean filterDuplicationOutput(String str){
-        return str.contains("Found a");
+    private Map<Duplication, Integer> getAllDuplications() {
+        Map<Duplication, Integer> allDuplications = new HashMap<>();
+        for(int i=0; i<duplicationOriginData.size(); i++){
+            String str = duplicationOriginData.get(i);
+            if( str.contains("Found a") && str.contains("duplication in the following files:")){
+                int duplicationLineSize = Integer.parseInt(str.substring(8, str.indexOf("line")-1));
+                Duplication d = new Duplication(duplicationOriginData.get(i+1), duplicationOriginData.get(i+2));
+                if(allDuplications.containsKey(d)){
+                    allDuplications.put(d, allDuplications.get(d) + duplicationLineSize);
+                }else {
+                    allDuplications.put(d, duplicationLineSize);
+                }
+                i += 2;
+            }
+        }
+        return allDuplications;
     }
 
-    private void addDuplicationOutput(String line){
-        int duplicationLineSize = Integer.parseInt(line.substring(8, line.indexOf("line")-1));
-        if( duplicationLineSize > DebtLimits.SUPERDUPLICATIONS){
-            this.superDuplications.add(duplicationLineSize);
+    public void parseSuperDuplication(Map<Duplication, Integer> allDuplications){
+        for(var d : allDuplications.entrySet()){
+            if( d.getValue() > DebtLimits.SUPERDUPLICATIONS){
+                this.superDuplications.put(d.getKey(), d.getValue());
+            }
         }
     }
-
 }

@@ -61,8 +61,6 @@ public class WhiteList {
             m.godClassWithVariables.remove(str);
             m.godClassWithMethods.remove(str);
             m.godComments.remove(str);
-
-
         }
     }
 
