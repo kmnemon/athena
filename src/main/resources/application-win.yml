@@ -1,0 +1,12 @@
+project:
+  - base:
+    target:
+
+
+report.uri:
+
+
+scan.rules:
+  maintenance: true
+  regulation: true
+  design : false

@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class DiffProjectTest {
 
     @Test
-    void testDiffListOnlyInSecond(){
+    void testDiffListOnlyInSecond() {
         List<String> a = new ArrayList<>();
         a.add("abc");
         a.add(("bcd.java"));
@@ -26,7 +26,7 @@ public class DiffProjectTest {
     }
 
     @Test
-    void testDiffListOnlyInSecondAndFilterLineNumber(){
+    void testDiffListOnlyInSecondAndFilterLineNumber() {
         List<String> a = new ArrayList<>();
         a.add("abc:15:");
         a.add(("bcd:345: .java"));
@@ -41,7 +41,7 @@ public class DiffProjectTest {
     }
 
     @Test
-    void testDiffMapOnlyIncreaseInSecondMap(){
+    void testDiffMapOnlyIncreaseInSecondMap() {
         Map<String, Integer> target = new HashMap<>();
         target.put("abc:", 1);
         target.put("sdf/sdf/sfd.java: sdf", 45);
@@ -62,7 +62,7 @@ public class DiffProjectTest {
     }
 
     @Test
-    void testdiffMapOnlyIncreaseInSecondMapAndFilterLineNumber(){
+    void testdiffMapOnlyIncreaseInSecondMapAndFilterLineNumber() {
         Map<String, Integer> target = new HashMap<>();
         target.put("abc :123:", 1);
         target.put("sdf/sdf/sfd.java:34: sdf", 45);
@@ -74,18 +74,9 @@ public class DiffProjectTest {
         base.put("sdf/sdf.java:346: sdf", 4);
 
         Map<String, Integer> diffMap = new HashMap<>(target);
-        for (Iterator<Map.Entry<String, Integer>> it = diffMap.entrySet().iterator(); it.hasNext();) {
+        for (Iterator<Map.Entry<String, Integer>> it = diffMap.entrySet().iterator(); it.hasNext(); ) {
             Map.Entry<String, Integer> entryDiff = it.next();
-
-
-
-//        Map<String, Integer> change = diffMapOnlyIncreaseInSecondMap(base, target);
-//
-//        assertEquals(2, change.size());
-//        assertTrue(change.containsKey("sdf/sdf/sfd.java:34: sdf"));
-//        assertTrue(change.containsKey("sdf/sdf/sfd123.java:34: sdf"));
-
-    }
+        }
 
         System.out.println(diffMap);
     }

@@ -1,5 +1,6 @@
 package pmd;
 
+import main.Main;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,20 +15,32 @@ public class Tools {
     private static final Logger log = LoggerFactory.getLogger(Tools.class);
 
     private static String getPmdCommand(String codeDir, String ruleset) {
-//        String pmdDir = ".\\tools\\pmd-bin-6.55.0\\bin\\pmd.bat";
-        String pmdDir = "./tools/pmd-bin-6.55.0/bin/pmd.bat";
+        String pmdDir;
+        if(Main.UNIX){
+            pmdDir = "./tools/pmd-bin-6.55.0/bin/pmd.bat";
+        }else{
+            pmdDir = ".\\tools\\pmd-bin-6.55.0\\bin\\pmd.bat";
+        }
         return pmdDir + " -d " + codeDir + " -f text -R " + ruleset;
     }
 
     private static String getP3CCommand(String codeDir, String ruleset) {
-        //String  pmdDir = "java -cp .\\tools\\p3c-pmd\\p3c-pmd.jar net.sourceforge.pmd.PMD -e UTF-8";
-        String pmdDir = "java -cp ./tools/p3c-pmd/p3c-pmd.jar net.sourceforge.pmd.PMD -e UTF-8";
+        String pmdDir;
+        if(Main.UNIX) {
+            pmdDir = "java -cp ./tools/p3c-pmd/p3c-pmd.jar net.sourceforge.pmd.PMD -e UTF-8";
+        }else{
+            pmdDir = "java -cp .\\tools\\p3c-pmd\\p3c-pmd.jar net.sourceforge.pmd.PMD -e UTF-8";
+        }
         return pmdDir + " -d " + codeDir + " -f text -R " + ruleset;
     }
 
     private static String getCpdCommand(String codeDir) {
-//        String cpdDir = ".\\tools\\pmd-bin-6.55.0\\bin\\cpd.bat";
-        String cpdDir = "./tools/pmd-bin-6.55.0/bin/cpd.bat";
+        String cpdDir;
+        if(Main.UNIX) {
+            cpdDir = "./tools/pmd-bin-6.55.0/bin/cpd.bat";
+        }else {
+            cpdDir = ".\\tools\\pmd-bin-6.55.0\\bin\\cpd.bat";
+        }
         String minimumTokens = "100";
         String language = "java";
         String encoding = "utf8";
@@ -48,7 +61,14 @@ public class Tools {
             directory.mkdirs();
         }
 
-        return reportDir  + "/" +  name + "/" + rulesets;
+        String fullReportDir;
+        if(Main.UNIX){
+            fullReportDir = reportDir +  name + "/" + rulesets;
+        }else {
+            fullReportDir = reportDir +  name + "\\" + rulesets;
+        }
+
+        return fullReportDir;
     }
 
     public static List<String> generatePmdOutput(String codeDir, String ruleset, String reportDir) {
@@ -133,8 +153,16 @@ public class Tools {
     }
 
     private static String getRelativePath(String line) {
-        String prefixSrc = "/src/main/java";
-        String prefixTest = "/src/test/java";
+        String prefixSrc;
+        String prefixTest;
+
+        if(Main.UNIX) {
+            prefixSrc = "/src/main/java";
+            prefixTest = "/src/test/java";
+        }else {
+            prefixSrc = "\\src\\main\\java";
+            prefixTest = "\\src\\test\\ava";
+        }
 
         int indexSrc = line.indexOf(prefixSrc);
         int indexTest = line.indexOf(prefixTest);

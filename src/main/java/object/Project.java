@@ -2,18 +2,24 @@ package object;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import techdebt.*;
+import techdebt.Design;
+import techdebt.Maintenance;
+import techdebt.Regulation;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 import static pmd.Tools.generateReportPathStr;
 
-public class Project implements P{
+public class Project{
     public String name;
     public Map<String, Package> packages;
 
@@ -28,6 +34,8 @@ public class Project implements P{
     private static final Logger log = LoggerFactory.getLogger(Project.class);
 
     public Project(String codeDir, String reportDir) {
+        createOrCleanReportDir(codeDir, reportDir);
+
         this.name = codeDir;
         this.packages = new HashMap<>();
 
@@ -41,10 +49,42 @@ public class Project implements P{
         this.printWriter = getPrintWriter(generateReportPathStr(this.codeDir, "summary", this.reportDir));
     }
 
-    public void parseObjects() {
-        this.parseMaintenanceDebt();
-        this.parseRegulationDebt();
-        this.parseDesignDebt();
+    public static void createOrCleanReportDir(String codeDir, String reportDir) {
+        codeDir = codeDir.replace("/", "_");
+        codeDir = codeDir.replace(":", "");
+
+        File directory = new File(reportDir + codeDir);
+        if(directory.exists()){
+            deleteDirectory(reportDir + codeDir);
+        }
+    }
+
+    public static void deleteDirectory(String dir) {
+        try{
+            Files.walk(Path.of(dir))
+                    .sorted(Comparator.reverseOrder())
+                    .map(Path::toFile)
+                    .forEach(File::delete);
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void parseTechDebt(Map<String, Boolean> rules) {
+        if( rules.get("maintenance")) {
+            this.parseMaintenanceDebt();
+            this.printMaintenanceStatistics("text");
+        }
+
+        if(rules.get("regulation")) {
+            this.parseRegulationDebt();
+            this.printRegulationStatistics("text");
+        }
+
+        if(rules.get("design")) {
+            this.parseDesignDebt();
+            this.printDesignStatistics("text");
+        }
     }
 
     public void parseMaintenanceDebt() {
@@ -96,22 +136,5 @@ public class Project implements P{
         }
         assert printWriter != null;
         return printWriter;
-    }
-
-
-    public String getName() {
-        return name;
-    }
-
-    public Maintenance getMaintenance() {
-        return maintenance;
-    }
-
-    public Regulation getRegulation() {
-        return regulation;
-    }
-
-    public Design getDesign() {
-        return design;
     }
 }

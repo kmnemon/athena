@@ -12,7 +12,7 @@ import java.util.function.UnaryOperator;
 import static object.Project.getPrintWriter;
 import static pmd.Tools.generateReportPathStr;
 
-public class DiffProject implements P{
+public class DiffProject{
     public String name;
     transient Project base;
     transient Project target;
@@ -122,20 +122,5 @@ public class DiffProject implements P{
         }
     }
 
-
-    public String getName() {
-        return name;
-    }
-
-    public Maintenance getMaintenance() {
-        return maintenance;
-    }
-
-    public Regulation getRegulation() {
-        return regulation;
-    }
-
-    public Design getDesign() {
-        return design;
-    }
+    public void parseDiffTechDebt(Map<String, Boolean> rules){}
 }

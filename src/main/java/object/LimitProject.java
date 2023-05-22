@@ -10,7 +10,13 @@ public class LimitProject extends DiffProject{
         super(name, base, target, reportDir);
     }
 
-    public void diffTechDebtObjectLimit(Map<String, Boolean> rules) {
+    @Override
+    public void parseDiffTechDebt(Map<String, Boolean> rules){
+        diffTechDebtObject(rules);
+        printDiffProject("text", "diff--limit--summary");
+    }
+
+    public void diffTechDebtObject(Map<String, Boolean> rules) {
         if(rules.get("maintenance")) {
             this.diffMaintenanceLimit();
             this.diffMaintenanceStatistics();

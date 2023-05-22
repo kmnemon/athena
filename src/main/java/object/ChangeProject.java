@@ -9,8 +9,13 @@ public class ChangeProject extends DiffProject{
     public ChangeProject(String name, Project base, Project target, String reportDir) {
         super(name, base, target, reportDir);
     }
+    @Override
+    public void parseDiffTechDebt(Map<String, Boolean> rules){
+        diffTechDebtObject(rules);
+        printDiffProject("text", "diff--change--summary");
+    }
 
-    public void diffTechDebtObjectChange(Map<String, Boolean> rules){
+    public void diffTechDebtObject(Map<String, Boolean> rules){
         if(rules.get("maintenance")) {
             this.diffMaintenanceStatisticsChange();
         }
@@ -28,6 +33,8 @@ public class ChangeProject extends DiffProject{
     public String toString(){
         return new GsonBuilder().setPrettyPrinting().create().toJson(this);
     }
+
+
 
     private void diffMaintenanceStatisticsChange(){
         maintenance.maintenanceStatistics.godClassesCount = target.maintenance.maintenanceStatistics.godClassesCount - base.maintenance.maintenanceStatistics.godClassesCount;

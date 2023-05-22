@@ -5,8 +5,8 @@ import com.google.gson.GsonBuilder;
 import java.util.Objects;
 
 public class Duplication {
-    String file1;
-    String file2;
+    public String file1;
+    public String file2;
 
     public Duplication(String file1, String file2) {
         this.file1 = file1;

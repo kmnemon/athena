@@ -1,29 +1,38 @@
 package astfile;
 
+import main.Main;
 import object.Project;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.nio.file.Paths;
-
-import static main.Main.createOrCleanReportDir;
 import static main.Main.handleReportDir;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AstTest {
     private Project p;
     Ast ast;
+
     @BeforeEach
     public void setUp(){
-        String codeDir = "/Users/ke/java/athena/src/test/java/testdata";
-        String reportDir = "/Users/ke/tmp/report/";
+        String codeDir;
+        String reportDir;
+        System.out.println(System.getProperty("user.dir"));
+
+        if(Main.UNIX) {
+            codeDir = "./src/test/java/testdata";
+            reportDir = "/Users/ke/tmp/report/";
+        }else {
+            codeDir = ".\\src\\test\\java\\testdata";
+            reportDir = "D:\\10_Code\\codequality\\unit-test-report\\";
+        }
+
         handleReportDir(reportDir);
-        createOrCleanReportDir(codeDir, reportDir);
 
         p = new Project(codeDir, reportDir);
         Ast.generateObjectsWithAst(codeDir, p);
 
     }
+
     @Test
     public void testAstToPackage(){
         assertEquals("testdata", ast.p.packages.get("testdata").name);

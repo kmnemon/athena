@@ -1,79 +1,78 @@
 package object;
 
+import main.Main;
+import org.yaml.snakeyaml.Yaml;
 import techdebt.Design;
+import techdebt.Duplication;
 import techdebt.Maintenance;
 import techdebt.Regulation;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
 public class WhiteList {
-    //rule, classes
-    List<String> maintenanceWhiteList;
-    List<String> regulationWhiteList;
-    List<String> designWhiteList;
+    static Map<String, List<String>> maintenanceWhiteList;
+    static Map<String, List<String>> regulationWhiteList;
+    static Map<String, List<String>> designWhiteList;
 
-    public WhiteList() {
-        maintenanceWhiteList = new ArrayList<>();
-        regulationWhiteList = new ArrayList<>();
-        designWhiteList = new ArrayList<>();
 
-        transferWhiteListPathToCategory(readWhiteList());
+    static void initWhiteListFromYaml(){
+        InputStream inputStream = Main.class.getClassLoader().getResourceAsStream("whitelist.yml");
+        Yaml yaml = new Yaml();
+        Map<String, Object> data = yaml.load(inputStream);
+
+        maintenanceWhiteList = (Map<String, List<String>>) data.get("maintenance");
+        regulationWhiteList = (Map<String, List<String>>) data.get("regulation");
+        designWhiteList = (Map<String, List<String>>) data.get("design");
     }
 
-    Map<String, List<String>> readWhiteList(){
-        //TO DO:
-        return new HashMap<>();
+    public static void filterWithWhiteList(Project p){
+        initWhiteListFromYaml();
+
+        filterMaintenance(p.maintenance);
+        filterRegulation(p.regulation);
+        filterDesign(p.design);
     }
 
-    void transferWhiteListPathToCategory(Map<String, List<String>> whiteListPath) {
-        List<String> maintenanceWhiteListPath = whiteListPath.get("Maintenance");
-        if (maintenanceWhiteListPath != null && !maintenanceWhiteListPath.isEmpty()) {
-            maintenanceWhiteList = transferWhiteListPathToWhiteList(maintenanceWhiteListPath);
-        }
-
-        List<String> regulationWhiteListPath = whiteListPath.get("Regulation");
-        if (regulationWhiteListPath != null && !regulationWhiteListPath.isEmpty()) {
-            regulationWhiteList = transferWhiteListPathToWhiteList(regulationWhiteListPath);
-        }
-
-        List<String> designWhiteListPath = whiteListPath.get("Design");
-        if (designWhiteListPath != null && !designWhiteListPath.isEmpty()) {
-            designWhiteList = transferWhiteListPathToWhiteList(designWhiteListPath);
+    static void filterMaintenance(Maintenance m){
+        for(var item : maintenanceWhiteList.entrySet()){
+            if(item != null){
+                for(var name : item.getValue()){
+                    filterMaintenanceWithName(m, name);
+                }
+            }
         }
     }
 
-    List<String> transferWhiteListPathToWhiteList(List<String> path){
-        //TO DO:
-        return new ArrayList<>();
+    private static void filterMaintenanceWithName(Maintenance m, String name) {
+        removeItemWhenContainInName(m.godClassWithMethods, name);
+        removeItemWhenContainInName(m.godClassWithVariables, name);
+        removeItemWhenContainInName(m.godComments, name);
+
+        removeItemWhenContainInName(m.superMethodWithParameters, name);
+        removeItemWhenContainInName(m.superMethodWithLines, name);
+        removeItemWhenContainInName(m.superCyclomatics, name);
+
+        removeDuplicationWhenContainInName(m.superDuplications, name);
     }
 
-    void filterWithWhiteList(P p){
-        filterMaintenance(p.getMaintenance());
-        filterRegulation(p.getRegulation());
-        filterDesign(p.getDesign());
+    static void removeItemWhenContainInName(Map<String, Integer> m, String name){
+        m.entrySet().removeIf(item -> item.getKey().contains(name));
     }
 
-    void filterMaintenance(Maintenance m) {
-        for (String str : maintenanceWhiteList) {
-            m.godClassWithVariables.remove(str);
-            m.godClassWithMethods.remove(str);
-            m.godComments.remove(str);
-        }
+    static void removeDuplicationWhenContainInName(Map<Duplication, Integer> m, String packName){
+        m.entrySet().removeIf(item -> item.getKey().file1.contains(packName) || item.getKey().file2.contains(packName));
     }
 
 
-    void filterRegulation(Regulation r){
-
-    }
-
-    void filterDesign(Design d){
+    static void filterRegulation(Regulation r){
 
     }
 
-    
+    static void filterDesign(Design d){
+
+    }
 
 
 }
