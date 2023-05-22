@@ -250,7 +250,8 @@ public class Maintenance {
             String str = duplicationOriginData.get(i);
             if( str.contains("Found a") && str.contains("duplication in the following files:")){
                 int duplicationLineSize = Integer.parseInt(str.substring(8, str.indexOf("line")-1));
-                Duplication d = new Duplication(duplicationOriginData.get(i+1), duplicationOriginData.get(i+2));
+                Duplication d = new Duplication(duplicationOriginData.get(i+1).replace("\\", "."),
+                        duplicationOriginData.get(i+2).replace("\\", "."));
                 if(allDuplications.containsKey(d)){
                     allDuplications.put(d, allDuplications.get(d) + duplicationLineSize);
                 }else {
