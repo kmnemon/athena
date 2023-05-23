@@ -21,8 +21,8 @@ public class Maintenance {
     transient Project p;
     public MaintenanceStatistics maintenanceStatistics;
 
-    public List<String> cyclomaticOriginData;
-    public List<String> duplicationOriginData;
+    transient public List<String> cyclomaticOriginData;
+    transient public List<String> duplicationOriginData;
 
 
     //class level
