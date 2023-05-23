@@ -1,10 +1,7 @@
 package main;
 
 
-import object.ChangeProject;
-import object.DiffProject;
-import object.LimitProject;
-import object.Project;
+import object.*;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.InputStream;
@@ -15,7 +12,7 @@ public class Main {
     public static boolean UNIX = !System.getProperty("os.name").toLowerCase().contains("win");
 
     public static void main(String[] args) {
-        InputStream inputStream = getInputStream();
+        InputStream inputStream = Main.class.getClassLoader().getResourceAsStream("application.yml");
 
         Yaml yaml = new Yaml();
         Map<String, Object> data = yaml.load(inputStream);
@@ -33,22 +30,12 @@ public class Main {
         }
     }
 
-    private static InputStream getInputStream() {
-        InputStream inputStream;
-        if(UNIX) {
-            inputStream = Main.class.getClassLoader().getResourceAsStream("application.yml");
-        }else {
-            inputStream = Main.class.getClassLoader().getResourceAsStream("application-win.yml");
-        }
-        return inputStream;
-    }
-
-    private static Project parseProject(String projectDir, String reportDir, Map<String, Boolean> rules) {
+    static Project parseProject(String projectDir, String reportDir, Map<String, Boolean> rules) {
         if (projectDir == null || projectDir.isEmpty()) {
             return null;
         }
 
-        System.out.printf("~~~~%s begin~~~~: %s\n", projectDir);
+        System.out.printf("~~~~%s begin~~~~: \n", projectDir);
         Project p = new Project(projectDir, reportDir);
         p.parseTechDebt(rules);
 

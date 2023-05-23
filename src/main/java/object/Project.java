@@ -71,6 +71,8 @@ public class Project{
     }
 
     public void parseTechDebt(Map<String, Boolean> rules) {
+        WhiteList.initWhiteListFromYaml();
+
         if( rules.get("maintenance")) {
             this.parseMaintenanceDebt();
             this.printMaintenanceStatistics("text");

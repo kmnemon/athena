@@ -1,11 +1,13 @@
 package techdebt;
 
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import pmd.Rulesets;
 import pmd.Tools;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static object.WhiteList.filterRegulation;
 
 public class Regulation {
     public RegulationStatistics regulationStatistics;
@@ -21,6 +23,7 @@ public class Regulation {
 
     public void parseRegulationTechDebt(String codeDir, String reportDir){
         generateOriginData(codeDir, reportDir);
+        filterRegulation(this);
         generateRegulationStatistics();
 
     }
@@ -31,6 +34,15 @@ public class Regulation {
     }
 
     public Regulation() {
+        this.commentOriginData = new ArrayList<>();
+        this.constantOriginData = new ArrayList<>();
+        this.exceptionOriginData = new ArrayList<>();
+        this.flowControlOriginData = new ArrayList<>();
+        this.namingOriginData = new ArrayList<>();
+        this.oopOriginData = new ArrayList<>();
+        this.setOriginData = new ArrayList<>();
+        this.otherOriginData = new ArrayList<>();
+
         this.regulationStatistics = new RegulationStatistics();
     }
 

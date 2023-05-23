@@ -1,23 +1,23 @@
 maintenance:
-  packages:
-    - "pmd.Tools.java"
-    - "main.Main.java"
+  directory:
+    - "/testdata/"
+    - "/main/Main/"
   classes:
-    - "pmd.Tools.java"
-    - "main.Main.java"
+    - "/pmd/Tools.java"
+    - "/main/Main.java"
 
 regulation:
-  packages:
-    - "pmd"
-    - "techdebt"
+  directory:
+    - "/pmd/"
+    - "/src/test/java/testdata/TestAnno.java"
   classes:
-    - "pmd.Tools.java"
-    - "main.Main.java"
+    - "/pmd/Tools.java"
+    - "/main/Main.java"
 
 design:
-  packages:
-    - "pmd"
-    - "techdebt"
+  directory:
+    - "/pmd/"
+    - "/techdebt/"
   classes:
-    - "pmd.Tools.java"
-    - "main.Main.java"
+    - "/pmd/Tools.java"
+    - "/main/Main.java"

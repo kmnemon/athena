@@ -14,6 +14,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static object.WhiteList.filterMaintenance;
+
 public class Maintenance {
     transient Project p;
     public MaintenanceStatistics maintenanceStatistics;
@@ -69,6 +71,8 @@ public class Maintenance {
         parseDuplication();
 
         parseGodOrSuper();
+
+        filterMaintenance(this);
         
         generateMaintenanceStatistics();
     }

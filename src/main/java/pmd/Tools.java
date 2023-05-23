@@ -52,6 +52,7 @@ public class Tools {
         name = name.replace("/", "_");
         name = name.replace("\\", "_");
         name = name.replace(":", "");
+        name = name.replace(".", "");
 
         rulesets = rulesets.replace("/", "_");
         rulesets = rulesets.replace(".", "_");

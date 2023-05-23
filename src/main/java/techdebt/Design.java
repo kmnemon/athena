@@ -1,12 +1,13 @@
 package techdebt;
 
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import pmd.Rulesets;
 import pmd.Tools;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static object.WhiteList.filterDesign;
 
 public class Design {
     public DesignStatistics designStatistics;
@@ -21,12 +22,17 @@ public class Design {
     }
 
     public Design(){
+        this.designOriginData = new ArrayList<>();
+        this.multithreadingOriginData = new ArrayList<>();
+        this.performanceOriginData = new ArrayList<>();
+
         this.designStatistics = new DesignStatistics();
     }
 
 
     public void parseDesignTechDebt(String codeDir, String reportDir){
         generateOriginData(codeDir, reportDir);
+        filterDesign(this);
         generateDesignStatistics();
 
     }

@@ -3,7 +3,9 @@ package object;
 import org.junit.jupiter.api.Test;
 import techdebt.Duplication;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static object.WhiteList.removeDuplicationWhenContainInName;
@@ -46,6 +48,17 @@ public class WhiteListTest {
 
         assertEquals(1, m.size());
         assertEquals(3, m.get(d3));
+    }
 
+    @Test
+    public void TestRemoveItemWhenContainInNameUsingList(){
+        List<String> l = new ArrayList<>();
+        l.add("/com/ke/pmd/A");
+        l.add("/com/ke/pmd/B/1.java");
+
+        removeItemWhenContainInName(l, "ke.pmd.A");
+        removeItemWhenContainInName(l, "com.ke.pmd.B.1.java");
+
+        assertEquals(0, l.size());
     }
 }

@@ -59,8 +59,8 @@ public class AstTest {
 
     @Test
     public void testAstToComments(){
-        assertEquals(5, ast.p.packages.get("testdata").classes.get("X").comments.size());
-        assertEquals(2, ast.p.packages.get("testdata").classes.get("X").comments.get(2));
+        assertEquals(7, ast.p.packages.get("testdata").classes.get("X").comments.size());
+        assertEquals(1, ast.p.packages.get("testdata").classes.get("X").comments.get(2));
     }
 
 }
