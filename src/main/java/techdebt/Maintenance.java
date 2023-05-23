@@ -2,6 +2,7 @@ package techdebt;
 
 import astfile.Ast;
 import com.google.gson.GsonBuilder;
+import main.Main;
 import object.Class;
 import object.Method;
 import object.Project;
@@ -254,8 +255,17 @@ public class Maintenance {
             String str = duplicationOriginData.get(i);
             if( str.contains("Found a") && str.contains("duplication in the following files:")){
                 int duplicationLineSize = Integer.parseInt(str.substring(8, str.indexOf("line")-1));
-                Duplication d = new Duplication(duplicationOriginData.get(i+1).replace("\\", "."),
-                        duplicationOriginData.get(i+2).replace("\\", "."));
+                String file1;
+                String file2;
+                if(Main.UNIX){
+                    file1 = duplicationOriginData.get(i+1).replace("/", ".");
+                    file2 = duplicationOriginData.get(i+2).replace("/", ".");
+                }else {
+                    file1 = duplicationOriginData.get(i+1).replace("\\", ".");
+                    file2 = duplicationOriginData.get(i+2).replace("\\", ".");
+                }
+
+                Duplication d = new Duplication(file1, file2);
                 if(allDuplications.containsKey(d)){
                     allDuplications.put(d, allDuplications.get(d) + duplicationLineSize);
                 }else {
