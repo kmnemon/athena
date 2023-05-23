@@ -13,7 +13,7 @@ public class LimitProject extends DiffProject{
     @Override
     public void parseDiffTechDebt(Map<String, Boolean> rules){
         diffTechDebtObject(rules);
-        printDiffProject("text", "diff--limit--summary");
+        printDiffProject("diff--limit--summary");
     }
 
     public void diffTechDebtObject(Map<String, Boolean> rules) {

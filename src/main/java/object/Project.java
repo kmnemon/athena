@@ -15,13 +15,12 @@ import java.nio.file.Path;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 import static pmd.Tools.generateReportPathStr;
 
 public class Project{
     public String name;
-    public Map<String, Package> packages;
+    transient public Map<String, Package> packages;
 
     public Maintenance maintenance;
     public Regulation regulation;
@@ -29,7 +28,6 @@ public class Project{
 
     public String codeDir;
     public String reportDir;
-    private PrintWriter printWriter;
 
     private static final Logger log = LoggerFactory.getLogger(Project.class);
 
@@ -45,8 +43,6 @@ public class Project{
 
         this.codeDir = codeDir;
         this.reportDir = reportDir;
-
-        this.printWriter = getPrintWriter(generateReportPathStr(this.codeDir, "summary", this.reportDir));
     }
 
     public static void createOrCleanReportDir(String codeDir, String reportDir) {
@@ -75,17 +71,18 @@ public class Project{
 
         if( rules.get("maintenance")) {
             this.parseMaintenanceDebt();
-            this.printMaintenanceStatistics("text");
+            this.printMaintenanceStatistics();
+            this.printMaintenance();
         }
 
         if(rules.get("regulation")) {
             this.parseRegulationDebt();
-            this.printRegulationStatistics("text");
+            this.printRegulationStatistics();
         }
 
         if(rules.get("design")) {
             this.parseDesignDebt();
-            this.printDesignStatistics("text");
+            this.printDesignStatistics();
         }
     }
 
@@ -101,32 +98,36 @@ public class Project{
         this.design.parseDesignTechDebt(this.codeDir, this.reportDir);
     }
 
-    public void printMaintenanceStatistics(String format){
-        if (Objects.equals(format, "cmd")) {
-            System.out.println(this.maintenance.maintenanceStatistics);
-        } else if (Objects.equals(format, "text")) {
-            printWriter.println(this.maintenance.maintenanceStatistics);
-            printWriter.flush();
-        }
+    public void printMaintenance() {
+        PrintWriter printWriter = getPrintWriter(generateReportPathStr(this.codeDir, "maintenance", this.reportDir));
 
+        printWriter.println(this.maintenance);
+        printWriter.flush();
+        printWriter.close();
     }
 
-    public void printRegulationStatistics(String format) {
-        if (Objects.equals(format, "cmd")) {
-            System.out.println(this.regulation.regulationStatistics);
-        } else if (Objects.equals(format, "text")) {
-            printWriter.println(this.regulation.regulationStatistics);
-            printWriter.flush();
-        }
+    public void printMaintenanceStatistics() {
+        PrintWriter printWriter = getPrintWriter(generateReportPathStr(this.codeDir, "summary", this.reportDir));
+
+        printWriter.println(this.maintenance.maintenanceStatistics);
+        printWriter.flush();
+        printWriter.close();
     }
 
-    public void printDesignStatistics(String format) {
-        if (Objects.equals(format, "cmd")) {
-            System.out.println(this.design.designStatistics);
-        } else if (Objects.equals(format, "text")) {
-            printWriter.println(this.design.designStatistics);
-            printWriter.flush();
-        }
+    public void printRegulationStatistics() {
+        PrintWriter printWriter = getPrintWriter(generateReportPathStr(this.codeDir, "summary", this.reportDir));
+
+        printWriter.println(this.regulation.regulationStatistics);
+        printWriter.flush();
+        printWriter.close();
+    }
+
+    public void printDesignStatistics() {
+        PrintWriter printWriter = getPrintWriter(generateReportPathStr(this.codeDir, "summary", this.reportDir));
+
+        printWriter.println(this.design.designStatistics);
+        printWriter.flush();
+        printWriter.close();
     }
 
     public static PrintWriter getPrintWriter(String pathStr) {

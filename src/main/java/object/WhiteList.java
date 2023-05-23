@@ -30,7 +30,7 @@ public class WhiteList {
 
     public static void filterMaintenance(Maintenance m){
         for(var item : maintenanceWhiteList.entrySet()){
-            if(item != null){
+            if(item != null && item.getValue() != null){
                 for(var name : item.getValue()){
                     filterMaintenanceWithName(m, name);
                 }
@@ -78,7 +78,7 @@ public class WhiteList {
 
     public static void filterRegulation(Regulation r){
         for(var item : regulationWhiteList.entrySet()){
-            if(item != null){
+            if(item != null && item.getValue() != null){
                 for(var name : item.getValue()){
                     filterRegulationWithName(r, name);
                 }
@@ -99,7 +99,7 @@ public class WhiteList {
 
     public static void filterDesign(Design d){
         for(var item : designWhiteList.entrySet()){
-            if(item != null){
+            if(item != null&& item.getValue() != null){
                 for(var name : item.getValue()){
                     filterDesignWithName(d, name);
                 }

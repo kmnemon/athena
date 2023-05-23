@@ -12,7 +12,7 @@ public class ChangeProject extends DiffProject{
     @Override
     public void parseDiffTechDebt(Map<String, Boolean> rules){
         diffTechDebtObject(rules);
-        printDiffProject("text", "diff--change--summary");
+        printDiffProject("diff--change--summary");
     }
 
     public void diffTechDebtObject(Map<String, Boolean> rules){

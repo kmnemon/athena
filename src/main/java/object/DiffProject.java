@@ -110,17 +110,14 @@ public class DiffProject{
         return str.replaceAll(":\\d+:", "");
     }
 
-    public void printDiffProject(String format, String type) {
-        if (Objects.equals(format, "cmd")) {
-            System.out.println(this);
-        } else if (Objects.equals(format, "text")) {
-            String pathStr = generateReportPathStr(name, type, reportDir);
+    public void printDiffProject(String type) {
+        String pathStr = generateReportPathStr(name, type, reportDir);
 
-            PrintWriter printWriter = getPrintWriter(pathStr);
-            printWriter.println(this);
-            printWriter.close();
-        }
+        PrintWriter printWriter = getPrintWriter(pathStr);
+        printWriter.println(this);
+        printWriter.close();
     }
+
 
     public void parseDiffTechDebt(Map<String, Boolean> rules){}
 }
