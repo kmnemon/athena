@@ -1,19 +1,19 @@
 maintenance:
-  directory:
+  directories:
     - "/testdata/"
     - "/main/Main/"
-  classes:
+  files:
     - "/pmd/Tools.java"
     - "/main/Main.java"
 
 regulation:
-  directory:
+  directories:
 
-  classes:
+  files:
 
 
 design:
-  directory:
+  directories:
 
-  classes:
+  files:
 

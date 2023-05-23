@@ -68,21 +68,22 @@ public class Project{
 
     public void parseTechDebt(Map<String, Boolean> rules) {
         WhiteList.initWhiteListFromYaml();
+        PrintWriter printWriter = getPrintWriter(generateReportPathStr(this.codeDir, "summary", this.reportDir));
 
         if( rules.get("maintenance")) {
             this.parseMaintenanceDebt();
-            this.printMaintenanceStatistics();
+            this.printMaintenanceStatistics(printWriter);
             this.printMaintenance();
         }
 
         if(rules.get("regulation")) {
             this.parseRegulationDebt();
-            this.printRegulationStatistics();
+            this.printRegulationStatistics(printWriter);
         }
 
         if(rules.get("design")) {
             this.parseDesignDebt();
-            this.printDesignStatistics();
+            this.printDesignStatistics(printWriter);
         }
     }
 
@@ -106,28 +107,19 @@ public class Project{
         printWriter.close();
     }
 
-    public void printMaintenanceStatistics() {
-        PrintWriter printWriter = getPrintWriter(generateReportPathStr(this.codeDir, "summary", this.reportDir));
-
+    public void printMaintenanceStatistics(PrintWriter printWriter) {
         printWriter.println(this.maintenance.maintenanceStatistics);
         printWriter.flush();
-        printWriter.close();
     }
 
-    public void printRegulationStatistics() {
-        PrintWriter printWriter = getPrintWriter(generateReportPathStr(this.codeDir, "summary", this.reportDir));
-
+    public void printRegulationStatistics(PrintWriter printWriter) {
         printWriter.println(this.regulation.regulationStatistics);
         printWriter.flush();
-        printWriter.close();
     }
 
-    public void printDesignStatistics() {
-        PrintWriter printWriter = getPrintWriter(generateReportPathStr(this.codeDir, "summary", this.reportDir));
-
+    public void printDesignStatistics(PrintWriter printWriter) {
         printWriter.println(this.design.designStatistics);
         printWriter.flush();
-        printWriter.close();
     }
 
     public static PrintWriter getPrintWriter(String pathStr) {
