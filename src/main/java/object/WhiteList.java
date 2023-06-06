@@ -1,32 +1,22 @@
 package object;
 
 import main.Main;
-import org.yaml.snakeyaml.Yaml;
 import techdebt.Design;
 import techdebt.Duplication;
 import techdebt.Maintenance;
 import techdebt.Regulation;
+import util.Util;
 
-import java.io.InputStream;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 public class WhiteList {
-    static Map<String, List<String>> maintenanceWhiteList;
-    static Map<String, List<String>> regulationWhiteList;
-    static Map<String, List<String>> designWhiteList;
+    static final Map<String, Object> data = Util.initEnvData("whitelist.yml");
 
-
-    public static void initWhiteListFromYaml(){
-        InputStream inputStream = Main.class.getClassLoader().getResourceAsStream("whitelist.yml");
-        Yaml yaml = new Yaml();
-        Map<String, Object> data = yaml.load(inputStream);
-
-        maintenanceWhiteList = (Map<String, List<String>>) data.get("maintenance");
-        regulationWhiteList = (Map<String, List<String>>) data.get("regulation");
-        designWhiteList = (Map<String, List<String>>) data.get("design");
-    }
+    static final Map<String, List<String>> maintenanceWhiteList = (Map<String, List<String>>) data.get("maintenance");
+    static final Map<String, List<String>> regulationWhiteList = (Map<String, List<String>>) data.get("regulation");
+    static final Map<String, List<String>> designWhiteList = (Map<String, List<String>>) data.get("design");
 
     public static void filterMaintenance(Maintenance m){
         for(var item : maintenanceWhiteList.entrySet()){

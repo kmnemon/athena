@@ -16,8 +16,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 public class WhiteListTest {
     @Test
     public void TestInitWhiteListFromYaml(){
-        WhiteList.initWhiteListFromYaml();
-
         assertEquals(2, WhiteList.maintenanceWhiteList.size());
     }
 
@@ -53,8 +51,8 @@ public class WhiteListTest {
     @Test
     public void TestRemoveItemWhenContainInNameUsingList(){
         List<String> l = new ArrayList<>();
-        l.add("/com/ke/pmd/A");
-        l.add("/com/ke/pmd/B/1.java");
+        l.add(".com.ke.pmd.A");
+        l.add(".com.ke.pmd.B.1.java");
 
         removeItemWhenContainInName(l, "ke.pmd.A");
         removeItemWhenContainInName(l, "com.ke.pmd.B.1.java");

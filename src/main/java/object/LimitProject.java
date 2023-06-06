@@ -75,24 +75,24 @@ public class LimitProject extends DiffProject{
     private void diffMaintenanceStatistics() {
         this.maintenance.generateMaintenanceStatistics();
 
-        this.maintenance.maintenanceStatistics.maxGodClassWithVariables = -999;
-        this.maintenance.maintenanceStatistics.maxGodClassWithMethods = -999;
-        this.maintenance.maintenanceStatistics.medianGodClassWithVariables = -999;
-        this.maintenance.maintenanceStatistics.medianGodClassWithMethods = -999;
+        this.maintenance.maintenanceStatistics.maxGodClassWithVariables = 0;
+        this.maintenance.maintenanceStatistics.maxGodClassWithMethods = 0;
+        this.maintenance.maintenanceStatistics.medianGodClassWithVariables = 0;
+        this.maintenance.maintenanceStatistics.medianGodClassWithMethods = 0;
 
-        this.maintenance.maintenanceStatistics.maxSuperMethodWithParameters = -999;
-        this.maintenance.maintenanceStatistics.maxSuperMethodWithLines = -999;
-        this.maintenance.maintenanceStatistics.medianSuperMethodWithParameters = -999;
-        this.maintenance.maintenanceStatistics.medianSuperMethodWithLines = -999;
+        this.maintenance.maintenanceStatistics.maxSuperMethodWithParameters = 0;
+        this.maintenance.maintenanceStatistics.maxSuperMethodWithLines = 0;
+        this.maintenance.maintenanceStatistics.medianSuperMethodWithParameters = 0;
+        this.maintenance.maintenanceStatistics.medianSuperMethodWithLines = 0;
 
-        this.maintenance.maintenanceStatistics.maxGodComment = -999;
-        this.maintenance.maintenanceStatistics.medianGodComment = -999;
+        this.maintenance.maintenanceStatistics.maxGodComment = 0;
+        this.maintenance.maintenanceStatistics.medianGodComment = 0;
 
-        this.maintenance.maintenanceStatistics.maxCyclomatic = -999;
-        this.maintenance.maintenanceStatistics.medianCyclomatic = -999;
+        this.maintenance.maintenanceStatistics.maxCyclomatic = 0;
+        this.maintenance.maintenanceStatistics.medianCyclomatic = 0;
 
-        this.maintenance.maintenanceStatistics.maxDuplication = -999;
-        this.maintenance.maintenanceStatistics.medianDuplication = -999;
+        this.maintenance.maintenanceStatistics.maxDuplication = 0;
+        this.maintenance.maintenanceStatistics.medianDuplication = 0;
     }
 
     private void diffRegulationStatistics() {

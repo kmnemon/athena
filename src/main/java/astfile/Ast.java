@@ -9,9 +9,8 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import object.Class;
-import object.Method;
 import object.Package;
-import object.Project;
+import object.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -183,8 +182,16 @@ public class Ast {
             mname = md.getNameAsString() + "@" + i;
         }
 
-        Method m = new Method(mname, packName, cname, md.getDeclarationAsString(), md.getParameters().size(), getMethodLines(md));
+        Method m = new Method(mname, packName, cname, md.getDeclarationAsString(),getAccessFromStr(md.getAccessSpecifier().asString()), md.getParameters().size(), getMethodLines(md));
         p.packages.get(packName).classes.get(cname).methods.put(mname, m);
+    }
+
+    private static Access getAccessFromStr(String str){
+        if(!Objects.equals(str, "")){
+            return Access.valueOf(str.toUpperCase());
+        }else {
+            return Access.valueOf("NONE");
+        }
     }
 
     private static int getMethodLines(MethodDeclaration md){

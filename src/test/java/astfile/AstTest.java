@@ -5,7 +5,7 @@ import object.Project;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static main.Main.handleReportDir;
+import static util.Util.addEndCharacterToDirectory;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AstTest {
@@ -16,7 +16,6 @@ public class AstTest {
     public void setUp(){
         String codeDir;
         String reportDir;
-        System.out.println(System.getProperty("user.dir"));
 
         if(Main.UNIX) {
             codeDir = "./src/test/java/testdata";
@@ -26,7 +25,7 @@ public class AstTest {
             reportDir = "D:\\10_Code\\codequality\\unit-test-report\\";
         }
 
-        handleReportDir(reportDir);
+        addEndCharacterToDirectory(reportDir);
 
         p = new Project(codeDir, reportDir);
         Ast.generateObjectsWithAst(codeDir, p);

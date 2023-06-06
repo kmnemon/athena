@@ -3,6 +3,7 @@ package techdebt;
 import astfile.Ast;
 import com.google.gson.GsonBuilder;
 import main.Main;
+import object.Access;
 import object.Class;
 import object.Method;
 import object.Project;
@@ -95,13 +96,13 @@ public class Maintenance {
     }
 
     private void parseGodClass(Class c){
-        parseGodClassWithMethods(c);
+        parseGodClassWithPublicMethods(c);
         parseGodClassWithVariables(c);
         parseGodComments(c);
     }
 
-    private void parseGodClassWithMethods(Class c){
-        if( c.methods.size() > DebtLimits.GODCLASS_WITH_METHODS){
+    private void parseGodClassWithPublicMethods(Class c){
+        if( c.getMethodsWithAccess(Access.PUBLIC).size() > DebtLimits.GODCLASS_WITH_METHODS){
             this.godClassWithMethods.put(generateFullClassName(c.packName, c.name), c.methods.size());
         }
     }

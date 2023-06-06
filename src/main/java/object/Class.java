@@ -22,4 +22,16 @@ public class Class{
         this.comments = new ArrayList<>();
     }
 
+    public Map<String, Method> getMethodsWithAccess(Access access){
+        Map<String, Method> filterMethods = new HashMap<>();
+
+        for(var m : this.methods.entrySet()){
+            if(m.getValue().access.asString().equals(access.asString())){
+                filterMethods.put(m.getKey(), m.getValue());
+            }
+        }
+
+        return filterMethods;
+    }
+
 }

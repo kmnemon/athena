@@ -32,8 +32,6 @@ public class Project{
     private static final Logger log = LoggerFactory.getLogger(Project.class);
 
     public Project(String codeDir, String reportDir) {
-        createOrCleanReportDir(codeDir, reportDir);
-
         this.name = codeDir;
         this.packages = new HashMap<>();
 
@@ -43,6 +41,29 @@ public class Project{
 
         this.codeDir = codeDir;
         this.reportDir = reportDir;
+    }
+
+
+    public void parseTechDebt(Map<String, Boolean> rules) {
+        createOrCleanReportDir(codeDir, reportDir);
+
+        PrintWriter printWriter = getPrintWriter(generateReportPathStr(this.codeDir, "summary", this.reportDir));
+
+        if( rules.get("maintenance")) {
+            this.parseMaintenanceDebt();
+            this.printMaintenanceStatistics(printWriter);
+            this.printMaintenance();
+        }
+
+        if(rules.get("regulation")) {
+            this.parseRegulationDebt();
+            this.printRegulationStatistics(printWriter);
+        }
+
+        if(rules.get("design")) {
+            this.parseDesignDebt();
+            this.printDesignStatistics(printWriter);
+        }
     }
 
     public static void createOrCleanReportDir(String codeDir, String reportDir) {
@@ -63,27 +84,6 @@ public class Project{
                     .forEach(File::delete);
         }catch (IOException e){
             e.printStackTrace();
-        }
-    }
-
-    public void parseTechDebt(Map<String, Boolean> rules) {
-        WhiteList.initWhiteListFromYaml();
-        PrintWriter printWriter = getPrintWriter(generateReportPathStr(this.codeDir, "summary", this.reportDir));
-
-        if( rules.get("maintenance")) {
-            this.parseMaintenanceDebt();
-            this.printMaintenanceStatistics(printWriter);
-            this.printMaintenance();
-        }
-
-        if(rules.get("regulation")) {
-            this.parseRegulationDebt();
-            this.printRegulationStatistics(printWriter);
-        }
-
-        if(rules.get("design")) {
-            this.parseDesignDebt();
-            this.printDesignStatistics(printWriter);
         }
     }
 
