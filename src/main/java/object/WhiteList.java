@@ -12,11 +12,11 @@ import java.util.List;
 import java.util.Map;
 
 public class WhiteList {
-    static final Map<String, Object> data = Util.initEnvData("whitelist.yml");
+    private static final Map<String, Object> data = Util.initEnvData("whitelist.yml");
 
-    static final Map<String, List<String>> maintenanceWhiteList = (Map<String, List<String>>) data.get("maintenance");
-    static final Map<String, List<String>> regulationWhiteList = (Map<String, List<String>>) data.get("regulation");
-    static final Map<String, List<String>> designWhiteList = (Map<String, List<String>>) data.get("design");
+    static Map<String, List<String>> maintenanceWhiteList = (Map<String, List<String>>) data.get("maintenance");;
+    static Map<String, List<String>> regulationWhiteList = (Map<String, List<String>>) data.get("regulation");;
+    static Map<String, List<String>> designWhiteList = (Map<String, List<String>>) data.get("design");;
 
     public static void filterMaintenance(Maintenance m){
         for(var item : maintenanceWhiteList.entrySet()){
