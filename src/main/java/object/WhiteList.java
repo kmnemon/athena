@@ -14,9 +14,9 @@ import java.util.Map;
 public class WhiteList {
     private static final Map<String, Object> data = Util.initEnvData("whitelist.yml");
 
-    static Map<String, List<String>> maintenanceWhiteList = (Map<String, List<String>>) data.get("maintenance");;
-    static Map<String, List<String>> regulationWhiteList = (Map<String, List<String>>) data.get("regulation");;
-    static Map<String, List<String>> designWhiteList = (Map<String, List<String>>) data.get("design");;
+    static final Map<String, List<String>> maintenanceWhiteList = (Map<String, List<String>>) data.get("maintenance");;
+    static final Map<String, List<String>> regulationWhiteList = (Map<String, List<String>>) data.get("regulation");;
+    static final Map<String, List<String>> designWhiteList = (Map<String, List<String>>) data.get("design");;
 
     public static void filterMaintenance(Maintenance m){
         for(var item : maintenanceWhiteList.entrySet()){
